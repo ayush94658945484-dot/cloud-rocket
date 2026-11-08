@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Search, 
-  Clock, 
-  MapPin, 
-  CheckCircle2, 
-  Truck, 
-  ChefHat, 
-  AlertCircle, 
+import {
+  Search,
+  Clock,
+  MapPin,
+  CheckCircle2,
+  Truck,
+  ChefHat,
+  AlertCircle,
   ShoppingBag,
   MessageCircle
 } from 'lucide-react';
@@ -76,15 +76,15 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({ initialOrderNumb
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
-      
+
       {/* Page Header with Official Food Rocket Logo */}
       <div className="text-center max-w-xl mx-auto space-y-3">
         <div className="flex justify-center mb-1">
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-white p-1 shadow-lg shadow-orange-500/20 ring-4 ring-emerald-500/40 hover:scale-105 transition-transform flex-shrink-0">
-            <img 
-              src="/food-rocket-logo.png" 
-              alt="Food Rocket Logo" 
-              className="w-full h-full object-contain rounded-full" 
+            <img
+              src="/food-rocket-logo.png"
+              alt="Food Rocket Logo"
+              className="w-full h-full object-contain rounded-full"
             />
           </div>
         </div>
@@ -136,7 +136,7 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({ initialOrderNumb
       {/* Order Status Display */}
       {order && (
         <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-10 border border-slate-100 dark:border-slate-700 shadow-xl space-y-8 animate-in fade-in duration-300">
-          
+
           {/* Top Banner */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-100 dark:border-slate-700 gap-4">
             <div>
@@ -150,13 +150,12 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({ initialOrderNumb
             </div>
 
             <div className="sm:text-right">
-              <span className={`inline-block px-3 py-1.5 rounded-full text-xs font-black tracking-wider uppercase ${
-                order.order_status === 'DELIVERED' 
+              <span className={`inline-block px-3 py-1.5 rounded-full text-xs font-black tracking-wider uppercase ${order.order_status === 'DELIVERED'
                   ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300'
                   : order.order_status === 'CANCELLED'
-                  ? 'bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300'
-                  : 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 animate-pulse'
-              }`}>
+                    ? 'bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300'
+                    : 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 animate-pulse'
+                }`}>
                 {order.order_status.replace(/_/g, ' ')}
               </span>
               <p className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">
@@ -193,11 +192,10 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({ initialOrderNumb
 
                     return (
                       <div key={step.key} className="flex md:flex-col items-center md:text-center gap-3">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs transition-all shadow-md ${
-                          isCompleted
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs transition-all shadow-md ${isCompleted
                             ? 'bg-gradient-to-tr from-orange-600 to-amber-500 text-white shadow-orange-500/30'
                             : 'bg-slate-200 dark:bg-slate-700 text-slate-400'
-                        } ${isCurrent ? 'ring-4 ring-orange-200 dark:ring-orange-800 scale-110' : ''}`}>
+                          } ${isCurrent ? 'ring-4 ring-orange-200 dark:ring-orange-800 scale-110' : ''}`}>
                           {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : idx + 1}
                         </div>
                         <div className="flex-1 md:flex-initial">
