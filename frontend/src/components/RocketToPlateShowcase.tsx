@@ -672,13 +672,80 @@ export const RocketToPlateShowcase: React.FC<RocketToPlateShowcaseProps> = ({ on
             </div>
           )}
 
-          {/* Golden Chicken Landed Badge Overlay */}
+          {/* Photorealistic Gourmet Chicken Reveal Presentation Card */}
           {stage === 'chicken_revealed' && (
-            <div className="absolute top-16 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-center animate-in fade-in zoom-in duration-300">
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white font-black text-xs sm:text-sm px-4 py-1.5 rounded-full shadow-2xl border border-emerald-400/60">
-                <Flame className="w-4 h-4 text-amber-300 fill-amber-300" />
-                <span>3D CHICKEN LANDED FRESH & STEAMING!</span>
-                <span className="text-amber-300">⚡ 0.8s</span>
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-3 sm:p-4 pointer-events-none animate-in zoom-in-95 duration-400">
+              <div className="relative pointer-events-auto bg-slate-950/92 backdrop-blur-xl border-2 border-amber-500/70 rounded-3xl p-4 sm:p-5 shadow-2xl shadow-orange-950/95 flex flex-col items-center text-center max-w-sm sm:max-w-md w-full">
+                
+                {/* Real Photographic Chicken Visual */}
+                <div className="relative w-full h-44 sm:h-52 rounded-2xl overflow-hidden shadow-2xl ring-2 ring-amber-500/60 group">
+                  <img
+                    src="/real-roasted-chicken.jpg"
+                    alt="Authentic Fresh Tandoori Roasted Chicken - Real Culinary Quality"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  />
+                  {/* Rising steam clouds animation */}
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-3 text-2xl select-none animate-bounce drop-shadow-md">
+                    <span>♨️</span>
+                    <span className="delay-150">♨️</span>
+                    <span className="delay-300">♨️</span>
+                  </div>
+                  <div className="absolute top-3 left-3 bg-red-600/90 backdrop-blur-md text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1 shadow-lg">
+                    <Flame className="w-3 h-3 fill-amber-300 text-amber-300" />
+                    <span>Real Charcoal Tandoor Roast</span>
+                  </div>
+                  <div className="absolute bottom-3 right-3 bg-slate-950/85 backdrop-blur-md text-amber-300 text-[10px] font-extrabold px-2.5 py-1 rounded-full border border-amber-500/40 flex items-center gap-1">
+                    <span>🤤 100% Juicy & Tender</span>
+                  </div>
+                </div>
+
+                {/* Dish Details */}
+                <div className="mt-3 w-full text-left">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-base sm:text-lg font-black text-white">
+                        Signature Whole Tandoori Chicken
+                      </h4>
+                      <p className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
+                        <span>✓ Genuine Chef Recipe</span>
+                        <span>•</span>
+                        <span>Freshly Roasted</span>
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-lg font-black text-amber-400">
+                        ₹319
+                      </span>
+                      <span className="text-[11px] text-slate-400 line-through block">
+                        ₹399
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
+                    Slow-roasted over authentic charcoal in clay tandoor. Glistening spiced herb glaze, succulent juicy meat, served hot with fresh lemon and sliced red onions.
+                  </p>
+
+                  <div className="mt-3.5 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleOrderHotChicken}
+                      className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs sm:text-sm py-2.5 px-4 rounded-xl shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
+                    >
+                      <ShoppingBag className="w-4 h-4" />
+                      <span>{autoOrdered ? '✓ Added to Cart!' : 'Order This Hot Chicken (₹319)'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={launchRocket}
+                      className="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs p-2.5 rounded-xl border border-slate-700 hover:text-white cursor-pointer transition-all"
+                      title="Launch 3D Rocket Again"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
               </div>
             </div>
           )}

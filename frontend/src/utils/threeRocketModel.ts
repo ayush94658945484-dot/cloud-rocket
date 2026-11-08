@@ -315,102 +315,51 @@ export function create3DPlateAndChicken(): {
 
   sceneGroup.add(plateGroup);
 
-  // 2. DELICIOUS 3D ROASTED CHICKEN
+  // 2. ULTRA-REALISTIC ROASTED CHICKEN ON PLATTER (Texture Mapped with Realistic Specular)
   const chickenGroup = new THREE.Group();
-  chickenGroup.position.y = 0.25;
+  chickenGroup.position.y = 0.22;
 
-  const roastedSkinMat = new THREE.MeshStandardMaterial({
-    color: 0xb45309,
-    roughness: 0.32,
-    metalness: 0.08,
+  // Load real culinary photographic texture
+  const textureLoader = new THREE.TextureLoader();
+  const chickenTexture = textureLoader.load('/real-roasted-chicken.jpg');
+  chickenTexture.colorSpace = THREE.SRGBColorSpace;
+
+  const realChickenMat = new THREE.MeshStandardMaterial({
+    map: chickenTexture,
+    roughness: 0.35,
+    metalness: 0.12,
+    side: THREE.DoubleSide,
   });
 
-  const darkGlazeMat = new THREE.MeshStandardMaterial({
-    color: 0x78350f,
-    roughness: 0.28,
-    metalness: 0.1,
-  });
+  // Dual-sided curved 3D platter medallion showcasing the authentic roasted chicken
+  const platterFaceGeo = new THREE.CylinderGeometry(1.68, 1.68, 0.12, 48);
+  platterFaceGeo.rotateY(-Math.PI / 2);
+  const platterFace = new THREE.Mesh(platterFaceGeo, realChickenMat);
+  platterFace.position.y = 0.12;
+  platterFace.receiveShadow = true;
+  chickenGroup.add(platterFace);
 
-  const boneMat = new THREE.MeshStandardMaterial({
-    color: 0xf8fafc,
+  // Cross-plane 3D volumetric realistic food profile for 3D depth when rotating
+  const profileGeo = new THREE.PlaneGeometry(2.4, 1.4);
+  profileGeo.translate(0, 0.65, 0);
+  const profileMat = new THREE.MeshStandardMaterial({
+    map: chickenTexture,
+    transparent: true,
+    alphaTest: 0.05,
     roughness: 0.4,
-    metalness: 0.1,
+    side: THREE.DoubleSide
   });
 
-  const herbMat = new THREE.MeshStandardMaterial({
-    color: 0x16a34a,
-    roughness: 0.5,
-  });
+  const profilePlane1 = new THREE.Mesh(profileGeo, profileMat);
+  chickenGroup.add(profilePlane1);
 
-  const lemonMat = new THREE.MeshStandardMaterial({
-    color: 0xfacc15,
-    roughness: 0.3,
-  });
+  const profilePlane2 = new THREE.Mesh(profileGeo, profileMat);
+  profilePlane2.rotation.y = Math.PI / 3;
+  chickenGroup.add(profilePlane2);
 
-  // Plump roasted chicken breast body
-  const bodyGeo = new THREE.SphereGeometry(0.85, 32, 24);
-  bodyGeo.scale(1.2, 0.75, 0.95);
-  const body = new THREE.Mesh(bodyGeo, roastedSkinMat);
-  body.castShadow = true;
-  chickenGroup.add(body);
-
-  // Upper glazed roasted crest
-  const glazeGeo = new THREE.SphereGeometry(0.72, 24, 16);
-  glazeGeo.scale(1.1, 0.55, 0.85);
-  glazeGeo.translate(0, 0.22, 0);
-  const glaze = new THREE.Mesh(glazeGeo, darkGlazeMat);
-  chickenGroup.add(glaze);
-
-  // Drumstick legs (Left & Right)
-  [-1, 1].forEach((side) => {
-    const legGroup = new THREE.Group();
-    legGroup.position.set(side * 0.7, 0.1, -0.2);
-    legGroup.rotation.set(0.3, side * -0.4, side * -0.3);
-
-    // Drumstick meaty bulb
-    const bulbGeo = new THREE.SphereGeometry(0.38, 20, 16);
-    bulbGeo.scale(1.0, 1.4, 0.9);
-    const bulb = new THREE.Mesh(bulbGeo, roastedSkinMat);
-    legGroup.add(bulb);
-
-    // Bone shaft with paper chef frill
-    const shaftGeo = new THREE.CylinderGeometry(0.06, 0.08, 0.45, 12);
-    shaftGeo.translate(0, 0.5, 0);
-    const shaft = new THREE.Mesh(shaftGeo, boneMat);
-    legGroup.add(shaft);
-
-    // Bone knuckle
-    const knuckleGeo = new THREE.SphereGeometry(0.1, 12, 12);
-    knuckleGeo.translate(0, 0.72, 0);
-    const knuckle = new THREE.Mesh(knuckleGeo, boneMat);
-    legGroup.add(knuckle);
-
-    chickenGroup.add(legGroup);
-  });
-
-  // Fresh garnish: Lemon wedges & herbs
-  const lemonGeo = new THREE.CylinderGeometry(0.28, 0.28, 0.1, 16, 1, false, 0, Math.PI);
-  lemonGeo.rotateZ(Math.PI / 2);
-  const lemon1 = new THREE.Mesh(lemonGeo, lemonMat);
-  lemon1.position.set(-1.1, -0.05, 0.4);
-  lemon1.rotation.y = 0.5;
-  chickenGroup.add(lemon1);
-
-  const lemon2 = new THREE.Mesh(lemonGeo, lemonMat);
-  lemon2.position.set(1.1, -0.05, 0.4);
-  lemon2.rotation.y = -0.5;
-  chickenGroup.add(lemon2);
-
-  // Sprinkled herb flakes
-  for (let i = 0; i < 18; i++) {
-    const herbGeo = new THREE.BoxGeometry(0.06, 0.02, 0.06);
-    const herb = new THREE.Mesh(herbGeo, herbMat);
-    const theta = Math.random() * Math.PI * 2;
-    const r = Math.random() * 0.65;
-    herb.position.set(Math.cos(theta) * r, 0.4 + Math.random() * 0.15, Math.sin(theta) * r * 0.8);
-    herb.rotation.set(Math.random(), Math.random(), Math.random());
-    chickenGroup.add(herb);
-  }
+  const profilePlane3 = new THREE.Mesh(profileGeo, profileMat);
+  profilePlane3.rotation.y = -Math.PI / 3;
+  chickenGroup.add(profilePlane3);
 
   sceneGroup.add(chickenGroup);
 
