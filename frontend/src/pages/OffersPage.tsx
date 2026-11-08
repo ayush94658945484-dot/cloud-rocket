@@ -33,15 +33,15 @@ export const OffersPage: React.FC<OffersPageProps> = ({ onExploreMenu }) => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
-      
+
       {/* Page Header with Official Food Rocket Logo */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <div className="flex justify-center mb-1">
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-white p-1 shadow-lg shadow-orange-500/20 ring-4 ring-emerald-500/40 hover:scale-105 transition-transform flex-shrink-0">
-            <img 
-              src="/food-rocket-logo.png" 
-              alt="Food Rocket Logo" 
-              className="w-full h-full object-contain rounded-full" 
+            <img
+              src="/food-rocket-logo.png"
+              alt="Food Rocket Logo"
+              className="w-full h-full object-contain rounded-full"
             />
           </div>
         </div>
@@ -109,7 +109,7 @@ export const OffersPage: React.FC<OffersPageProps> = ({ onExploreMenu }) => {
               <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-wide">
                 {coupon.code}
               </h3>
-              
+
               <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                 {coupon.description}
               </p>

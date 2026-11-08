@@ -7,15 +7,15 @@ export const AboutPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
-      
+
       {/* Hero Header with Official Food Rocket Logo */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
         <div className="flex justify-center mb-1">
           <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-white p-1 shadow-xl shadow-orange-500/20 ring-4 ring-emerald-500/40 hover:scale-105 transition-transform">
-            <img 
-              src="/food-rocket-logo.png" 
-              alt="Food Rocket Logo" 
-              className="w-full h-full object-contain rounded-full" 
+            <img
+              src="/food-rocket-logo.png"
+              alt="Food Rocket Logo"
+              className="w-full h-full object-contain rounded-full"
             />
           </div>
         </div>

@@ -13,6 +13,7 @@ import { AuthModal } from './components/AuthModal';
 import { FoodDetailModal } from './components/FoodDetailModal';
 import { ModeModal } from './components/ModeModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+import { FlyingRocketAtmosphere } from './components/FlyingRocketAtmosphere';
 
 // Customer Pages
 import { HomePage } from './pages/HomePage';
@@ -219,6 +220,9 @@ const MainApp: React.FC = () => {
 
       {/* Persistent Floating WhatsApp Help Button */}
       <FloatingWhatsApp />
+
+      {/* Global Flying Rocket Atmosphere & Cursor Follower */}
+      <FlyingRocketAtmosphere />
     </div>
   );
 };

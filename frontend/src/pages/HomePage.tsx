@@ -24,6 +24,7 @@ import { useSettings } from '../context/SettingsContext';
 import { useMode } from '../context/ModeContext';
 import { FoodCard } from '../components/FoodCard';
 import { ReviewSection } from '../components/ReviewSection';
+import { RocketToPlateShowcase } from '../components/RocketToPlateShowcase';
 
 interface HomePageProps {
   onNavigate: (page: string, params?: any) => void;
@@ -211,6 +212,35 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
                 <span className="text-[10px]">↓</span>
               </span>
             </button>
+
+            {/* Rocket Blast Chicken Theater Jump Button */}
+            <button
+              type="button"
+              onClick={() => {
+                const el = document.getElementById('rocket-blast-theater');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="group inline-flex items-center gap-3 bg-gradient-to-r from-red-950/80 via-orange-950/80 to-slate-900 text-white border border-red-500/50 hover:border-orange-400 backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl transition-all cursor-pointer hover:scale-102"
+              title="Watch Rocket Blast Chicken Delivery Demo"
+            >
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-red-500 to-orange-500 flex items-center justify-center text-lg shadow-md group-hover:scale-110 transition-transform">
+                🚀
+              </div>
+              <div className="text-left">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-black text-amber-300">Live Blast!</span>
+                  <span className="text-[10px] text-red-300 bg-red-900/60 px-1.5 py-0.5 rounded-full font-bold">💥 0.8s</span>
+                </div>
+                <p className="text-[11px] text-slate-300 mt-0.5 flex items-center gap-1">
+                  <span>Rocket-to-Plate</span>
+                  <span className="text-xs">🍗</span>
+                </p>
+              </div>
+              <span className="ml-1 text-xs font-black bg-gradient-to-r from-red-600 to-orange-600 text-white px-3 py-1.5 rounded-xl shadow-sm flex items-center gap-1">
+                <span>Watch</span>
+                <span className="text-xs">↓</span>
+              </span>
+            </button>
           </div>
 
           {/* Trust Highlights */}
@@ -265,6 +295,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
           </div>
         </div>
       </section>
+
+      {/* 1.5. INTERACTIVE ROCKET-TO-PLATE CHICKEN BLAST SHOWCASE */}
+      <div id="rocket-blast-theater">
+        <RocketToPlateShowcase onNavigate={onNavigate} />
+      </div>
 
       {/* 2. POPULAR FOOD CATEGORIES (8 Categories Grid) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

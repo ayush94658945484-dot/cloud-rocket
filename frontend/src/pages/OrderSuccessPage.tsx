@@ -41,14 +41,14 @@ export const OrderSuccessPage: React.FC<OrderSuccessPageProps> = ({ order, whats
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-16 sm:py-24 text-center space-y-8">
-      
+
       {/* Official Food Rocket Logo & Animated Success Badge */}
       <div className="flex flex-col items-center justify-center gap-3">
         <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-white p-1 shadow-xl shadow-orange-500/20 ring-4 ring-emerald-500/40 hover:scale-105 transition-transform flex-shrink-0">
-          <img 
-            src="/food-rocket-logo.png" 
-            alt="Food Rocket Logo" 
-            className="w-full h-full object-contain rounded-full" 
+          <img
+            src="/food-rocket-logo.png"
+            alt="Food Rocket Logo"
+            className="w-full h-full object-contain rounded-full"
           />
         </div>
         <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/20 animate-bounce">
