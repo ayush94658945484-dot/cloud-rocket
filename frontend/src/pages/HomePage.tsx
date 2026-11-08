@@ -213,7 +213,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
               </span>
             </button>
 
-            {/* Rocket Blast Chicken Theater Jump Button */}
+            {/* 3D Rocket Blast Chicken Theater Jump Button */}
             <button
               type="button"
               onClick={() => {
@@ -221,23 +221,23 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
               className="group inline-flex items-center gap-3 bg-gradient-to-r from-red-950/80 via-orange-950/80 to-slate-900 text-white border border-red-500/50 hover:border-orange-400 backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl transition-all cursor-pointer hover:scale-102"
-              title="Watch Rocket Blast Chicken Delivery Demo"
+              title="Watch 3D Rocket Blast Chicken Delivery Demo"
             >
               <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-red-500 to-orange-500 flex items-center justify-center text-lg shadow-md group-hover:scale-110 transition-transform">
                 🚀
               </div>
               <div className="text-left">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-black text-amber-300">Live Blast!</span>
-                  <span className="text-[10px] text-red-300 bg-red-900/60 px-1.5 py-0.5 rounded-full font-bold">💥 0.8s</span>
+                  <span className="text-xs font-black text-amber-300">3D Blast!</span>
+                  <span className="text-[10px] text-red-300 bg-red-900/60 px-1.5 py-0.5 rounded-full font-bold">💥 3D WebGL</span>
                 </div>
                 <p className="text-[11px] text-slate-300 mt-0.5 flex items-center gap-1">
-                  <span>Rocket-to-Plate</span>
+                  <span>3D Rocket to Plate</span>
                   <span className="text-xs">🍗</span>
                 </p>
               </div>
               <span className="ml-1 text-xs font-black bg-gradient-to-r from-red-600 to-orange-600 text-white px-3 py-1.5 rounded-xl shadow-sm flex items-center gap-1">
-                <span>Watch</span>
+                <span>Watch 3D</span>
                 <span className="text-xs">↓</span>
               </span>
             </button>
