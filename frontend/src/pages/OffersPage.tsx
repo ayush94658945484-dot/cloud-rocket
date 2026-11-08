@@ -34,15 +34,30 @@ export const OffersPage: React.FC<OffersPageProps> = ({ onExploreMenu }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       
-      {/* Page Header */}
+      {/* Page Header with Official Food Rocket Logo */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <span className="text-orange-600 font-extrabold text-xs uppercase tracking-widest bg-orange-100 px-3.5 py-1 rounded-full">
-          Gourmet Savings
-        </span>
-        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-          Exclusive Cloud Kitchen Offers
+        <div className="flex justify-center mb-1">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-white p-1 shadow-lg shadow-orange-500/20 ring-4 ring-emerald-500/40 hover:scale-105 transition-transform flex-shrink-0">
+            <img 
+              src="/food-rocket-logo.png" 
+              alt="Food Rocket Logo" 
+              className="w-full h-full object-contain rounded-full" 
+            />
+          </div>
+        </div>
+        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-100 to-emerald-100 dark:from-orange-950/60 dark:to-emerald-950/60 px-4 py-1.5 rounded-full border border-orange-200 dark:border-orange-800">
+          <span className="text-xs font-black uppercase tracking-wider text-orange-700 dark:text-orange-300">
+            Food Rocket Deals
+          </span>
+          <span className="text-xs">🚀</span>
+          <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
+            Fuel Your Hunger, Fast
+          </span>
+        </div>
+        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+          Exclusive Kitchen Offers
         </h1>
-        <p className="text-slate-500 text-sm">
+        <p className="text-slate-500 dark:text-slate-400 text-sm">
           Enjoy mouth-watering discounts, festive feasts, and free delivery vouchers on every feast.
         </p>
       </div>
@@ -79,11 +94,11 @@ export const OffersPage: React.FC<OffersPageProps> = ({ onExploreMenu }) => {
         {coupons.map((coupon) => (
           <div
             key={coupon.id}
-            className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between space-y-5 relative overflow-hidden"
+            className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between space-y-5 relative overflow-hidden"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-orange-50 text-orange-700 border border-orange-200 uppercase">
+                <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-orange-50 dark:bg-orange-950/60 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-800 uppercase">
                   {coupon.discount_type === 'PERCENTAGE'
                     ? `${coupon.discount_value}% Discount`
                     : `Flat ₹${coupon.discount_value} OFF`}
@@ -91,11 +106,11 @@ export const OffersPage: React.FC<OffersPageProps> = ({ onExploreMenu }) => {
                 <Tag className="w-5 h-5 text-orange-500" />
               </div>
 
-              <h3 className="text-xl font-black text-slate-900 tracking-wide">
+              <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-wide">
                 {coupon.code}
               </h3>
               
-              <p className="text-xs text-slate-600 leading-relaxed font-medium">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                 {coupon.description}
               </p>
 
@@ -107,10 +122,10 @@ export const OffersPage: React.FC<OffersPageProps> = ({ onExploreMenu }) => {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
               <button
                 onClick={() => handleCopy(coupon.code)}
-                className="text-xs font-bold text-orange-600 hover:text-orange-700 hover:underline"
+                className="text-xs font-bold text-orange-600 dark:text-orange-400 hover:underline cursor-pointer"
               >
                 {copiedCode === coupon.code ? 'Copied! ✓' : 'Copy Code'}
               </button>
@@ -128,4 +143,3 @@ export const OffersPage: React.FC<OffersPageProps> = ({ onExploreMenu }) => {
     </div>
   );
 };
-

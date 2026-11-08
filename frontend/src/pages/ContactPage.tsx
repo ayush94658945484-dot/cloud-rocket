@@ -35,64 +35,79 @@ export const ContactPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
       
-      {/* Header */}
+      {/* Header with Official Food Rocket Logo */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <span className="text-orange-600 font-extrabold text-xs uppercase tracking-widest bg-orange-100 px-3.5 py-1 rounded-full">
-          Get in Touch
-        </span>
-        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+        <div className="flex justify-center mb-1">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-white p-1 shadow-lg shadow-orange-500/20 ring-4 ring-emerald-500/40 hover:scale-105 transition-transform flex-shrink-0">
+            <img 
+              src="/food-rocket-logo.png" 
+              alt="Food Rocket Logo" 
+              className="w-full h-full object-contain rounded-full" 
+            />
+          </div>
+        </div>
+        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-100 to-emerald-100 dark:from-orange-950/60 dark:to-emerald-950/60 px-4 py-1.5 rounded-full border border-orange-200 dark:border-orange-800">
+          <span className="text-xs font-black uppercase tracking-wider text-orange-700 dark:text-orange-300">
+            Contact Food Rocket
+          </span>
+          <span className="text-xs">🚀</span>
+          <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
+            Fuel Your Hunger, Fast
+          </span>
+        </div>
+        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
           We'd Love to Hear From You
         </h1>
-        <p className="text-slate-500 text-sm">
+        <p className="text-slate-500 dark:text-slate-400 text-sm">
           Have a question about an order, custom catering feast, or feedback? Our culinary team is here to assist.
         </p>
       </div>
 
       {/* Contact Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-xs space-y-3 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-700 shadow-xs space-y-3 text-center">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
             <MessageCircle className="w-6 h-6" />
           </div>
-          <h3 className="font-bold text-slate-900 text-sm">WhatsApp Orders</h3>
-          <p className="text-xs text-slate-500">Fastest 1-tap ordering & live status</p>
+          <h3 className="font-bold text-slate-900 dark:text-white text-sm">WhatsApp Orders</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Fastest 1-tap ordering & live status</p>
           <a
             href={`https://wa.me/${(settings.whatsapp_number || '919876543210').replace(/[^0-9]/g, '')}`}
             target="_blank"
             rel="noreferrer"
-            className="text-xs font-bold text-emerald-600 hover:underline block pt-1"
+            className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline block pt-1"
           >
             Chat Now ➔
           </a>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-xs space-y-3 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center mx-auto">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-700 shadow-xs space-y-3 text-center">
+          <div className="w-12 h-12 rounded-2xl bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center mx-auto">
             <Phone className="w-6 h-6" />
           </div>
-          <h3 className="font-bold text-slate-900 text-sm">Call Support</h3>
-          <p className="text-xs text-slate-500">{settings.contact_phone || '+91 98765 43210'}</p>
+          <h3 className="font-bold text-slate-900 dark:text-white text-sm">Call Support</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{settings.contact_phone || '+91 98765 43210'}</p>
           <span className="text-[11px] text-slate-400 block pt-1">11:00 AM - 11:30 PM</span>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-xs space-y-3 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-700 shadow-xs space-y-3 text-center">
+          <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto">
             <Mail className="w-6 h-6" />
           </div>
-          <h3 className="font-bold text-slate-900 text-sm">Email Us</h3>
-          <p className="text-xs text-slate-500">{settings.contact_email || 'orders@foodrocket.com'}</p>
+          <h3 className="font-bold text-slate-900 dark:text-white text-sm">Email Us</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{settings.contact_email || 'orders@foodrocket.com'}</p>
           <span className="text-[11px] text-slate-400 block pt-1">Response within 2 hours</span>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-xs space-y-3 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mx-auto">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-700 shadow-xs space-y-3 text-center">
+          <div className="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center mx-auto">
             <MapPin className="w-6 h-6" />
           </div>
-          <h3 className="font-bold text-slate-900 text-sm">Kitchen Location</h3>
-          <p className="text-xs text-slate-500 line-clamp-2">
+          <h3 className="font-bold text-slate-900 dark:text-white text-sm">Kitchen Location</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
             {settings.address || 'Cloud Culinary Hub, Sector 18, Commercial Zone, Mumbai'}
           </p>
-          <span className="text-[11px] text-purple-600 font-bold block pt-1">Delivery Only Hub</span>
+          <span className="text-[11px] text-purple-600 dark:text-purple-400 font-bold block pt-1">Delivery Only Hub</span>
         </div>
       </div>
 
@@ -100,57 +115,57 @@ export const ContactPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
         
         {/* Form */}
-        <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-md space-y-6">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-slate-100 dark:border-slate-700 shadow-md space-y-6">
           <div>
-            <h3 className="text-xl font-bold text-slate-900">Send an Inquiry or Feedback</h3>
-            <p className="text-xs text-slate-500 mt-1">We respond to every message from our food connoisseurs.</p>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Send an Inquiry or Feedback</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">We respond to every message from our food connoisseurs.</p>
           </div>
 
           {submitted ? (
-            <div className="p-6 bg-emerald-50 text-emerald-800 rounded-2xl text-center space-y-2">
+            <div className="p-6 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 rounded-2xl text-center space-y-2">
               <Check className="w-8 h-8 text-emerald-600 mx-auto" />
               <h4 className="font-bold text-sm">Message Sent Successfully!</h4>
-              <p className="text-xs text-emerald-700">Thank you for reaching out. Our culinary manager will connect with you shortly.</p>
+              <p className="text-xs text-emerald-700 dark:text-emerald-300">Thank you for reaching out. Our culinary manager will connect with you shortly.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Your Name</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Your Name</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Rahul Sharma"
-                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-orange-500"
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-orange-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Mobile / WhatsApp</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Mobile / WhatsApp</label>
                   <input
                     type="tel"
                     required
                     placeholder="9876543210"
-                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-orange-500"
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-orange-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Email Address</label>
                 <input
                   type="email"
                   placeholder="name@example.com"
-                  className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-orange-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Message / Request</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Message / Request</label>
                 <textarea
                   required
                   rows={4}
                   placeholder="Tell us what you need or share your dining experience..."
-                  className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-orange-500"
                 ></textarea>
               </div>
 
@@ -183,20 +198,20 @@ export const ContactPage: React.FC = () => {
           </div>
 
           {/* Frequently Asked Questions */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm space-y-4">
-            <h3 className="font-bold text-base text-slate-900">Frequently Asked Questions</h3>
+          <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-700 shadow-sm space-y-4">
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">Frequently Asked Questions</h3>
             <div className="space-y-3">
               {faqs.map((faq, idx) => (
-                <div key={idx} className="border border-slate-100 rounded-2xl overflow-hidden">
+                <div key={idx} className="border border-slate-100 dark:border-slate-700 rounded-2xl overflow-hidden">
                   <button
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                    className="w-full p-3.5 text-left text-xs font-bold text-slate-800 flex items-center justify-between hover:bg-slate-50 transition-colors"
+                    className="w-full p-3.5 text-left text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer"
                   >
                     <span>{faq.q}</span>
                     {openFaq === idx ? <ChevronUp className="w-4 h-4 text-orange-600" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                   </button>
                   {openFaq === idx && (
-                    <div className="px-3.5 pb-3.5 pt-1 text-xs text-slate-500 leading-relaxed bg-slate-50/50">
+                    <div className="px-3.5 pb-3.5 pt-1 text-xs text-slate-500 dark:text-slate-400 leading-relaxed bg-slate-50/50 dark:bg-slate-900/50">
                       {faq.a}
                     </div>
                   )}
@@ -209,4 +224,3 @@ export const ContactPage: React.FC = () => {
     </div>
   );
 };
-

@@ -46,16 +46,16 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       <aside className="w-full md:w-64 lg:w-72 bg-slate-950 text-white flex flex-col justify-between p-5 border-r border-slate-900 flex-shrink-0">
         <div className="space-y-6">
           
-          {/* Brand header */}
+          {/* Brand header with Official Food Rocket Emblem */}
           <div className="flex items-center gap-3 px-2 py-1">
-            <div className="w-10 h-10 rounded-xl bg-orange-600 flex items-center justify-center text-white font-bold shadow-md shadow-orange-600/30">
-              <Flame className="w-6 h-6" />
+            <div className="w-11 h-11 rounded-full overflow-hidden bg-white p-0.5 shadow-md shadow-orange-600/30 ring-2 ring-emerald-500/40 flex-shrink-0">
+              <img src="/food-rocket-logo.png" alt="Food Rocket" className="w-full h-full object-contain rounded-full" />
             </div>
             <div>
               <h2 className="font-black text-sm tracking-wide text-white leading-tight">
                 {settings.business_name || 'Food Rocket'}
               </h2>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-orange-400 block">
+              <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-400 block">
                 Kitchen Command Center
               </span>
             </div>
@@ -131,4 +131,3 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     </div>
   );
 };
-

@@ -102,23 +102,28 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20 gap-4">
             
-            {/* Brand Logo */}
+            {/* Official Food Rocket Brand Logo */}
             <div 
               onClick={() => { onNavigate('home'); setMobileMenuOpen(false); }}
               className="flex items-center gap-3 cursor-pointer group flex-shrink-0"
             >
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-500 flex items-center justify-center text-white shadow-md shadow-orange-500/25 group-hover:scale-105 transition-transform">
-                <Flame className="w-7 h-7 text-white fill-amber-200" />
+              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full overflow-hidden bg-white p-0.5 shadow-md shadow-orange-500/20 ring-2 ring-emerald-500/40 group-hover:scale-105 group-hover:ring-orange-500 transition-all flex-shrink-0">
+                <img 
+                  src="/food-rocket-logo.png" 
+                  alt="Food Rocket Logo" 
+                  className="w-full h-full object-contain rounded-full" 
+                />
               </div>
               <div>
                 <span className="font-extrabold text-xl sm:text-2xl text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
-                  {settings.business_name || 'Food Rocket'}
-                  <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-950/80 text-orange-700 dark:text-orange-300 hidden sm:inline-block">
-                    Cloud Kitchen
+                  <span className="text-orange-600">Food</span>{' '}
+                  <span className="text-emerald-600">Rocket</span>
+                  <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 hidden sm:inline-block border border-emerald-300/40">
+                    Express Kitchen
                   </span>
                 </span>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium tracking-wide hidden sm:block">
-                  Rocket-Fast Gourmet Food Delivery
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold tracking-wide hidden sm:block">
+                  Fuel Your Hunger, Fast 🚀
                 </p>
               </div>
             </div>
@@ -131,7 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => onNavigate(link.id)}
                   className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all relative flex items-center gap-1.5 ${
                     currentPage === link.id
-                      ? 'text-orange-600 bg-orange-50/80 dark:bg-orange-950/40 shadow-xs'
+                      ? 'text-orange-600 bg-orange-50/80 dark:bg-orange-950/40 shadow-xs font-bold'
                       : 'text-slate-700 dark:text-slate-200 hover:text-orange-600 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
                 >
@@ -336,6 +341,18 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
           <div className="lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top-4">
+            
+            {/* Mobile Brand Emblem Card */}
+            <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/80 rounded-2xl border border-slate-100 dark:border-slate-700 mb-2">
+              <div className="w-12 h-12 rounded-full overflow-hidden bg-white p-0.5 shadow-sm ring-2 ring-emerald-500/40 flex-shrink-0">
+                <img src="/food-rocket-logo.png" alt="Food Rocket Logo" className="w-full h-full object-contain rounded-full" />
+              </div>
+              <div>
+                <p className="font-black text-slate-900 dark:text-white text-sm">Food Rocket</p>
+                <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">Fuel Your Hunger, Fast 🚀</p>
+              </div>
+            </div>
+
             {/* Mobile Search */}
             {onSearchChange && (
               <div className="relative mb-3">
@@ -359,7 +376,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 handleScrollToTasteReviews();
               }}
-              className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between text-orange-700 dark:text-orange-300 bg-orange-50/80 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800"
+              className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between text-orange-700 dark:text-orange-300 bg-orange-50/80 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 cursor-pointer"
             >
               <div className="flex items-center gap-2">
                 <span className="text-xl">🤤</span>
@@ -377,7 +394,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onNavigate(link.id);
                   setMobileMenuOpen(false);
                 }}
-                className={`w-full text-left px-4 py-3 rounded-xl text-sm font-semibold flex items-center justify-between ${
+                className={`w-full text-left px-4 py-3 rounded-xl text-sm font-semibold flex items-center justify-between cursor-pointer ${
                   currentPage === link.id
                     ? 'text-orange-600 bg-orange-50 font-bold dark:bg-orange-950/30'
                     : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
@@ -398,7 +415,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onNavigate('admin');
                   setMobileMenuOpen(false);
                 }}
-                className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 flex items-center gap-2"
+                className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 flex items-center gap-2 cursor-pointer"
               >
                 <LayoutDashboard className="w-4 h-4 text-purple-600" />
                 Admin Dashboard

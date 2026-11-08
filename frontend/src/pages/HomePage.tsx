@@ -80,7 +80,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
     <div className="space-y-16 sm:space-y-24 pb-20">
       
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden bg-slate-950 min-h-[580px] sm:min-h-[640px] flex items-center justify-center">
+      <section className="relative overflow-hidden bg-slate-950 min-h-[600px] sm:min-h-[660px] flex items-center justify-center">
         {/* Background Image with High Quality Dark Gradient Overlay */}
         <div className="absolute inset-0 z-0">
           <img
@@ -95,10 +95,21 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
         {/* Hero Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           
+          {/* Official Food Rocket Brand Emblem */}
+          <div className="flex justify-center mb-4">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden bg-white p-1 shadow-2xl shadow-orange-600/40 ring-4 ring-emerald-500/60 hover:scale-108 transition-transform animate-in zoom-in-90 duration-300">
+              <img 
+                src="/food-rocket-logo.png" 
+                alt="Food Rocket Logo - Fuel Your Hunger, Fast" 
+                className="w-full h-full object-contain rounded-full" 
+              />
+            </div>
+          </div>
+
           {/* Top Brand Pill */}
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/40 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-amber-300 mb-6 shadow-lg shadow-orange-900/20">
-            <Flame className="w-4 h-4 text-orange-400 fill-orange-400" />
-            <span>Premium Cloud Kitchen Experience</span>
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/25 to-emerald-500/25 border border-orange-500/40 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest text-amber-300 mb-6 shadow-lg shadow-orange-900/20">
+            <span className="text-sm">🚀</span>
+            <span>Food Rocket Express • Fuel Your Hunger, Fast</span>
           </div>
 
           {/* Headline */}
@@ -259,7 +270,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
-            <span className="text-orange-600 font-extrabold text-xs uppercase tracking-widest bg-orange-100 dark:bg-orange-950/60 px-3 py-1 rounded-full">
+            <span className="text-orange-600 dark:text-orange-400 font-extrabold text-xs uppercase tracking-widest bg-orange-100 dark:bg-orange-950/60 px-3 py-1 rounded-full">
               Explore Our Kitchen
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight mt-2">
