@@ -290,3 +290,4 @@ export function createCursorRocket(): CursorRocketInstance {
     dispose,
   };
 }
+
