@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, Star, Clock, Flame, ShoppingBag, Plus, Minus, ShieldCheck } from 'lucide-react';
+import { X, Clock, Flame, ShoppingBag, Plus, Minus, ShieldCheck, Sparkles } from 'lucide-react';
 import { FoodItem } from '../types';
 import { useCart } from '../context/CartContext';
+import { TasteRatingBadge } from './TasteRating';
 
 interface FoodDetailModalProps {
   item: FoodItem | null;
@@ -11,9 +12,8 @@ interface FoodDetailModalProps {
 export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({ item, onClose }) => {
   if (!item) return null;
 
-  const { addToCart, getItemQuantity, updateQuantity } = useCart();
+  const { addToCart, getItemQuantity } = useCart();
   const [modalQty, setModalQty] = useState(1);
-  const cartQty = getItemQuantity(item.id);
 
   const price = item.discount_price && item.discount_price > 0 ? item.discount_price : item.price;
   const originalPrice = item.discount_price && item.discount_price > 0 ? item.price : null;
@@ -26,7 +26,7 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({ item, onClose 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div 
-        className="bg-white w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200"
+        className="bg-white dark:bg-slate-900 w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header with image */}
@@ -73,48 +73,71 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({ item, onClose 
 
         {/* Modal Body */}
         <div className="p-6 overflow-y-auto space-y-5">
-          {/* Attributes bar */}
-          <div className="flex items-center gap-4 py-2 border-b border-slate-100 text-xs text-slate-600">
-            <div className="flex items-center gap-1 text-amber-600 font-bold bg-amber-50 px-2.5 py-1 rounded-lg">
-              <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
-              <span>{item.rating || 4.8} / 5.0</span>
-            </div>
+          {/* Specific Taste Rating and Attributes bar */}
+          <div className="flex flex-wrap items-center gap-3 py-2 border-b border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+            {/* Specific Emoji Taste Rating Badge */}
+            <TasteRatingBadge rating={item.rating || 4.8} size="md" showLabel={true} />
+
             {item.preparation_time && (
-              <div className="flex items-center gap-1 text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg font-medium">
+              <div className="flex items-center gap-1 text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 rounded-lg font-medium border border-slate-200/60 dark:border-slate-700">
                 <Clock className="w-4 h-4 text-orange-500" />
                 <span>Prep: {item.preparation_time}</span>
               </div>
             )}
             {item.calories && (
-              <div className="text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg font-medium">
+              <div className="text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 rounded-lg font-medium border border-slate-200/60 dark:border-slate-700">
                 🔥 {item.calories} kcal
               </div>
             )}
           </div>
 
+          {/* Flavor Notes Tagged with Emojis */}
+          <div className="bg-orange-50/60 dark:bg-orange-950/30 p-3.5 rounded-2xl border border-orange-100 dark:border-orange-900/40">
+            <div className="flex items-center gap-1.5 text-xs font-extrabold text-orange-800 dark:text-orange-300 mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-orange-500" />
+              <span>Artisanal Taste Profile</span>
+            </div>
+            <div className="flex flex-wrap gap-2 text-xs">
+              <span className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 font-semibold flex items-center gap-1">
+                🤤 Slow Dum Marinated
+              </span>
+              <span className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 font-semibold flex items-center gap-1">
+                🌶️ Authentic Spiced
+              </span>
+              <span className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 font-semibold flex items-center gap-1">
+                🧈 Pure Desi Ghee
+              </span>
+            </div>
+          </div>
+
           {/* Description */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
-              About This Dish
+              About this delicacy
             </h4>
-            <p className="text-slate-700 text-sm leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
               {item.description}
             </p>
           </div>
 
           {/* Hygiene Guarantee */}
-          <div className="p-3.5 rounded-2xl bg-orange-50/60 border border-orange-100 flex items-center gap-3 text-xs text-slate-700">
-            <ShieldCheck className="w-5 h-5 text-orange-600 flex-shrink-0" />
-            <span>Cooked fresh to order in a temperature-controlled sterile cloud kitchen suite with tamper-evident packaging.</span>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-700 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-slate-900 dark:text-white">Fresh & Hygenic Packaging</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">Packed in premium tamper-proof food-grade containers</p>
+            </div>
           </div>
         </div>
 
-        {/* Modal Footer / Cart Actions */}
-        <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50 flex items-center justify-between gap-4">
+        {/* Modal Footer */}
+        <div className="p-4 sm:p-6 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
           <div>
-            <span className="text-xs text-slate-400 block font-medium">Total Price</span>
+            <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Total Price</span>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-black text-slate-900">
+              <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                 ₹{price * modalQty}
               </span>
               {originalPrice && (
@@ -127,17 +150,17 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({ item, onClose 
 
           {/* Quantity selector & Add Button */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center bg-white border border-slate-200 rounded-xl p-1 shadow-2xs">
+            <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-1 shadow-2xs">
               <button
                 onClick={() => setModalQty(Math.max(1, modalQty - 1))}
-                className="w-7 h-7 flex items-center justify-center hover:bg-slate-100 rounded-lg text-slate-600 transition-colors"
+                className="w-7 h-7 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
               >
                 <Minus className="w-4 h-4" />
               </button>
-              <span className="w-7 text-center font-bold text-sm text-slate-800">{modalQty}</span>
+              <span className="w-7 text-center font-bold text-sm text-slate-800 dark:text-white">{modalQty}</span>
               <button
                 onClick={() => setModalQty(modalQty + 1)}
-                className="w-7 h-7 flex items-center justify-center hover:bg-slate-100 rounded-lg text-slate-600 transition-colors"
+                className="w-7 h-7 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
               </button>
@@ -156,4 +179,3 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({ item, onClose 
     </div>
   );
 };
-

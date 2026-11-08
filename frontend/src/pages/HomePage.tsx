@@ -15,7 +15,8 @@ import {
   Heart,
   Sliders,
   Bike,
-  Leaf
+  Leaf,
+  Star
 } from 'lucide-react';
 import { FoodItem, Category } from '../types';
 import { api } from '../services/api';
@@ -34,47 +35,61 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
   const { orderMode, dietaryMode, themeMode, openModeModal } = useMode();
   const [categories, setCategories] = useState<Category[]>([]);
   const [bestsellers, setBestsellers] = useState<FoodItem[]>([]);
-  const [featured, setFeatured] = useState<FoodItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [copiedCoupon, setCopiedCoupon] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const catRes = await api.getCategories();
-        if (catRes.success) setCategories(catRes.categories);
+        const [catsRes, itemsRes] = await Promise.all([
+          api.getCategories(),
+          api.getFoodItems({ is_bestseller: 1 }),
+        ]);
 
-        const foodRes = await api.getFoodItems({ bestseller: true });
-        if (foodRes.success) setBestsellers(foodRes.items.slice(0, 8));
+        if (catsRes.success && catsRes.categories) {
+          setCategories(catsRes.categories);
+        }
 
-        const featRes = await api.getFoodItems({ featured: true });
-        if (featRes.success) setFeatured(featRes.items.slice(0, 4));
+        if (itemsRes.success && itemsRes.items) {
+          setBestsellers(itemsRes.items);
+        }
       } catch (err) {
-        console.error('Error fetching home data:', err);
+        console.error('Error fetching home page data:', err);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
   const copyCode = (code: string) => {
     navigator.clipboard.writeText(code);
     setCopiedCoupon(code);
-    setTimeout(() => setCopiedCoupon(null), 2000);
+    setTimeout(() => setCopiedCoupon(null), 2500);
+  };
+
+  const handleScrollToTasteReviews = () => {
+    const el = document.getElementById('taste-reviews');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
-    <div className="space-y-16 sm:space-y-24">
+    <div className="space-y-16 sm:space-y-24 pb-20">
       
-      {/* 1. HERO BANNER SECTION */}
-      <section className="relative min-h-[580px] lg:min-h-[660px] flex items-center justify-center overflow-hidden bg-slate-950 text-white">
-        {/* Background Food Photography with Dark Gradient */}
+      {/* 1. HERO SECTION */}
+      <section className="relative overflow-hidden bg-slate-950 min-h-[580px] sm:min-h-[640px] flex items-center justify-center">
+        {/* Background Image with High Quality Dark Gradient Overlay */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1920&q=85"
-            alt="Royal Gourmet Feast"
-            className="w-full h-full object-cover object-center opacity-35 scale-105 animate-in fade-in zoom-in-105 duration-1000"
+            src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=2000&q=85"
+            alt="Royal Biryani & Gourmet Feasts"
+            className="w-full h-full object-cover object-center opacity-30 mix-blend-luminosity scale-105 animate-pulse duration-[10000ms]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/50"></div>
-          <div className="absolute inset-0 bg-radial from-orange-600/15 via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent"></div>
+          <div className="absolute inset-0 bg-radial from-orange-950/20 via-transparent to-black/60"></div>
         </div>
 
         {/* Hero Content */}
@@ -119,8 +134,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
             </button>
           </div>
 
-          {/* Home Page Mode Switcher Button (Opens Popup) */}
-          <div className="mt-6 flex justify-center">
+          {/* Action Pills: Mode Switcher & Specific Taste Rating Badge */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            {/* Home Page Mode Switcher Button (Opens Popup) */}
             <button
               type="button"
               onClick={openModeModal}
@@ -143,12 +159,45 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-300 mt-0.5">
-                  Click here to switch fulfillment, pure veg, or dark mode
+                  Fulfillment • pure veg • dark theme
                 </p>
               </div>
               <span className="ml-1 text-xs font-black bg-gradient-to-r from-orange-500 to-amber-500 text-white px-3.5 py-1.5 rounded-xl shadow-sm group-hover:from-orange-600 group-hover:to-amber-600 transition-all flex items-center gap-1">
                 <span>Change Mode</span>
                 <span className="text-amber-200">⚡</span>
+              </span>
+            </button>
+
+            {/* Specific Taste Rating Icon & Button with Emojis */}
+            <button
+              type="button"
+              onClick={handleScrollToTasteReviews}
+              className="group inline-flex items-center gap-3 bg-slate-900/90 hover:bg-slate-900 text-white border border-orange-500/50 hover:border-orange-400 backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl transition-all cursor-pointer hover:scale-102"
+              title="Click to check taste reviews with foodie emojis"
+            >
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-400 to-orange-500 flex items-center justify-center text-lg shadow-md group-hover:scale-110 transition-transform">
+                🤤
+              </div>
+              <div className="text-left">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-black text-amber-300">4.9 / 5.0</span>
+                  <span className="text-[10px] text-amber-400 flex items-center gap-0.5">
+                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-300 mt-0.5 flex items-center gap-1">
+                  <span>Taste Score:</span>
+                  <span className="text-amber-300 font-extrabold">Mind-Blowing</span>
+                  <span className="text-xs">😋</span>
+                </p>
+              </div>
+              <span className="ml-1 text-xs font-bold bg-white/10 hover:bg-white/20 text-orange-200 px-3 py-1.5 rounded-xl border border-white/10 flex items-center gap-1">
+                <span>Reviews</span>
+                <span className="text-[10px]">↓</span>
               </span>
             </button>
           </div>
@@ -175,13 +224,21 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center flex-shrink-0">
-                <ChefHat className="w-5 h-5" />
+            {/* Specific Taste Rating Trust Item with Emoji */}
+            <div 
+              onClick={handleScrollToTasteReviews}
+              className="flex items-center gap-3 cursor-pointer group"
+              title="Click to view Customer Taste Reviews"
+            >
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center flex-shrink-0 text-xl group-hover:scale-110 transition-transform">
+                🤤
               </div>
               <div>
-                <p className="text-xs font-bold text-white">Master Chefs</p>
-                <p className="text-[11px] text-slate-400">Authentic royal recipes</p>
+                <p className="text-xs font-bold text-white flex items-center gap-1">
+                  <span>4.9/5 Taste Score</span>
+                  <span className="text-[10px] text-amber-400">★</span>
+                </p>
+                <p className="text-[11px] text-slate-400 group-hover:text-amber-300 transition-colors">25k+ Foodie reviews</p>
               </div>
             </div>
 
@@ -202,20 +259,20 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
-            <span className="text-orange-600 font-extrabold text-xs uppercase tracking-widest bg-orange-100 px-3 py-1 rounded-full">
+            <span className="text-orange-600 font-extrabold text-xs uppercase tracking-widest bg-orange-100 dark:bg-orange-950/60 px-3 py-1 rounded-full">
               Explore Our Kitchen
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mt-2">
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight mt-2">
               Popular Food Categories
             </h2>
-            <p className="text-slate-500 text-sm mt-1">
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
               Select a category to browse our handcrafted selections
             </p>
           </div>
 
           <button
             onClick={() => onNavigate('menu')}
-            className="flex items-center gap-1.5 text-orange-600 font-bold text-sm hover:underline self-start sm:self-auto cursor-pointer"
+            className="flex items-center gap-1.5 text-orange-600 dark:text-orange-400 font-bold text-sm hover:underline self-start sm:self-auto cursor-pointer"
           >
             <span>View Full Menu</span>
             <ChevronRight className="w-4 h-4" />
@@ -228,7 +285,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
             <div
               key={cat.id}
               onClick={() => onNavigate('menu', { category: cat.slug })}
-              className="bg-white rounded-2xl p-3 border border-slate-100 shadow-2xs hover:shadow-lg hover:border-orange-200 transition-all cursor-pointer group text-center flex flex-col items-center justify-between"
+              className="bg-white dark:bg-slate-800 rounded-2xl p-3 border border-slate-100 dark:border-slate-700 shadow-2xs hover:shadow-lg hover:border-orange-200 dark:hover:border-orange-500/50 transition-all cursor-pointer group text-center flex flex-col items-center justify-between"
             >
               <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden mb-2.5 p-1 bg-gradient-to-tr from-amber-400 to-orange-500 shadow-xs group-hover:scale-105 transition-transform">
                 <img
@@ -238,7 +295,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
                 />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-slate-800 group-hover:text-orange-600 transition-colors line-clamp-2 leading-tight">
+                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 leading-tight">
                   {cat.name}
                 </h4>
                 <span className="text-[10px] text-slate-400 font-medium">
@@ -300,20 +357,20 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
-            <span className="text-orange-600 font-extrabold text-xs uppercase tracking-widest bg-orange-100 px-3 py-1 rounded-full">
+            <span className="text-orange-600 dark:text-orange-400 font-extrabold text-xs uppercase tracking-widest bg-orange-100 dark:bg-orange-950/60 px-3 py-1 rounded-full">
               Crowd Favorites
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mt-2">
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight mt-2">
               Today's Most Ordered Dishes
             </h2>
-            <p className="text-slate-500 text-sm mt-1">
-              Cooked fresh in small batches to preserve royal flavors
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+              Cooked fresh in small batches with verified foodie taste scores
             </p>
           </div>
 
           <button
             onClick={() => onNavigate('menu')}
-            className="flex items-center gap-1.5 text-orange-600 font-bold text-sm hover:underline cursor-pointer"
+            className="flex items-center gap-1.5 text-orange-600 dark:text-orange-400 font-bold text-sm hover:underline cursor-pointer"
           >
             <span>See All Bestsellers</span>
             <ChevronRight className="w-4 h-4" />
@@ -376,24 +433,24 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
         </div>
       </section>
 
-      {/* 6. VERIFIED REVIEWS & RATINGS */}
+      {/* 6. VERIFIED REVIEWS & RATINGS WITH EMOJIS */}
       <ReviewSection />
 
       {/* 7. INSTAGRAM & SOCIAL MEDIA SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
         <div>
-          <span className="text-orange-600 font-extrabold text-xs uppercase tracking-widest bg-orange-100 px-3 py-1 rounded-full">
+          <span className="text-orange-600 dark:text-orange-400 font-extrabold text-xs uppercase tracking-widest bg-orange-100 dark:bg-orange-950/60 px-3 py-1 rounded-full">
             @CloudRocketKitchen
           </span>
-          <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mt-2">
+          <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight mt-2">
             Follow Our Culinary Journey on Instagram
           </h2>
-          <p className="text-slate-500 text-sm mt-1">
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
             Tag us in your food stories to get featured & win weekly feast vouchers!
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="rounded-2xl overflow-hidden aspect-square group relative">
             <img 
               src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=500&q=80" 
@@ -438,7 +495,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
       </section>
 
       {/* Floating Home Mode Switcher Pill */}
-      <div className="fixed bottom-6 left-6 z-40">
+      <div className="fixed bottom-6 left-6 z-40 flex items-center gap-2">
         <button
           type="button"
           onClick={openModeModal}
@@ -457,8 +514,19 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
             Mode
           </span>
         </button>
+
+        {/* Floating Quick Taste Reviews Pill */}
+        <button
+          type="button"
+          onClick={handleScrollToTasteReviews}
+          className="hidden sm:flex items-center gap-1.5 bg-slate-900/95 dark:bg-slate-800/95 hover:bg-black text-white border border-orange-500/40 backdrop-blur-md py-2.5 px-3.5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer group"
+          title="View Taste Reviews with Emojis"
+        >
+          <span className="text-base group-hover:scale-125 transition-transform">🤤</span>
+          <span className="text-xs font-black text-amber-300">4.9</span>
+          <span className="text-[10px] uppercase font-bold text-slate-300">Taste</span>
+        </button>
       </div>
     </div>
   );
 };
-

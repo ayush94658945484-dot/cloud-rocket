@@ -1,7 +1,8 @@
 import React from 'react';
-import { Plus, Minus, Star, Clock, Flame } from 'lucide-react';
+import { Plus, Minus, Clock, Flame } from 'lucide-react';
 import { FoodItem } from '../types';
 import { useCart } from '../context/CartContext';
+import { TasteRatingBadge } from './TasteRating';
 
 interface FoodCardProps {
   item: FoodItem;
@@ -73,12 +74,14 @@ export const FoodCard: React.FC<FoodCardProps> = ({ item, onQuickView }) => {
       {/* Food Details Body */}
       <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
-          {/* Rating */}
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <div className="flex items-center gap-1 bg-amber-50 text-amber-800 text-xs font-extrabold px-1.5 py-0.5 rounded-md border border-amber-200">
-              <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-              <span>{item.rating || 4.8}</span>
-            </div>
+          {/* Specific Taste Rating Icon Badge with Emoji */}
+          <div className="flex items-center gap-2 mb-1.5">
+            <TasteRatingBadge 
+              rating={item.rating || 4.8} 
+              size="sm" 
+              showLabel={true}
+              onClick={() => onQuickView && onQuickView(item)}
+            />
             <span className="text-[11px] text-slate-400 font-medium">
               ({item.reviews_count || 24}+ reviews)
             </span>
@@ -164,4 +167,3 @@ export const FoodCard: React.FC<FoodCardProps> = ({ item, onQuickView }) => {
     </div>
   );
 };
-

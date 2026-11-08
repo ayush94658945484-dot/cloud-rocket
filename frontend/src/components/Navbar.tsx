@@ -11,7 +11,8 @@ import {
   Sparkles,
   PhoneCall,
   LayoutDashboard,
-  Sliders
+  Sliders,
+  Star
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
@@ -51,6 +52,19 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'contact', label: 'Contact' },
   ];
 
+  const handleScrollToTasteReviews = () => {
+    if (currentPage !== 'home') {
+      onNavigate('home');
+      setTimeout(() => {
+        const el = document.getElementById('taste-reviews');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 250);
+    } else {
+      const el = document.getElementById('taste-reviews');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       {/* Top Announcement Bar */}
@@ -58,14 +72,15 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 overflow-hidden">
             <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-200 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-200"></span>
             </span>
-            <p className="truncate">
-              ⚡ <strong>Free Express Delivery</strong> on all orders above ₹{settings.free_delivery_threshold || '499'} | Use Code: <strong>WELCOME50</strong>
-            </p>
+            <span className="truncate font-semibold tracking-wide">
+              🎉 Flat 20% OFF on all gourmet orders! Use code <strong className="underline tracking-wider font-black text-amber-200">ROCKET20</strong>
+            </span>
           </div>
-          <div className="hidden md:flex items-center gap-4 text-xs">
+
+          <div className="hidden md:flex items-center gap-6 text-xs">
             <span className="flex items-center gap-1 opacity-90">
               <Clock className="w-3.5 h-3.5" /> 30-40 Mins Delivery
             </span>
@@ -83,7 +98,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* Main Sticky Navbar */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm transition-all">
+      <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 shadow-sm transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20 gap-4">
             
@@ -96,13 +111,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <Flame className="w-7 h-7 text-white fill-amber-200" />
               </div>
               <div>
-                <span className="font-extrabold text-xl sm:text-2xl text-slate-900 tracking-tight flex items-center gap-1.5">
+                <span className="font-extrabold text-xl sm:text-2xl text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
                   {settings.business_name || 'Cloud Rocket'}
-                  <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 hidden sm:inline-block">
+                  <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-950/80 text-orange-700 dark:text-orange-300 hidden sm:inline-block">
                     Cloud Kitchen
                   </span>
                 </span>
-                <p className="text-[11px] text-slate-500 font-medium tracking-wide hidden sm:block">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium tracking-wide hidden sm:block">
                   Rocket-Fast Gourmet Food Delivery
                 </p>
               </div>
@@ -116,8 +131,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => onNavigate(link.id)}
                   className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all relative flex items-center gap-1.5 ${
                     currentPage === link.id
-                      ? 'text-orange-600 bg-orange-50/80 shadow-xs'
-                      : 'text-slate-700 hover:text-orange-600 hover:bg-slate-50'
+                      ? 'text-orange-600 bg-orange-50/80 dark:bg-orange-950/40 shadow-xs'
+                      : 'text-slate-700 dark:text-slate-200 hover:text-orange-600 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
                 >
                   {link.label}
@@ -130,8 +145,22 @@ export const Navbar: React.FC<NavbarProps> = ({
               ))}
             </nav>
 
-            {/* Right Action Icons: Search, Mode Switcher, Veg Toggle, Cart, Account */}
-            <div className="flex items-center gap-2.5 sm:gap-4">
+            {/* Right Action Icons: Taste Rating, Mode Switcher, Veg Toggle, Cart, Account */}
+            <div className="flex items-center gap-2 sm:gap-3.5">
+
+              {/* Specific Taste Rating Icon & Reviews Button */}
+              <button
+                type="button"
+                onClick={handleScrollToTasteReviews}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border border-orange-300/60 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/40 dark:to-amber-950/40 text-orange-800 dark:text-orange-200 hover:border-orange-500 shadow-xs cursor-pointer hover:scale-105 active:scale-95 group"
+                title="View Verified Customer Taste Ratings with Emojis"
+              >
+                <span className="text-base group-hover:scale-125 transition-transform">🤤</span>
+                <span className="font-black text-slate-900 dark:text-white">4.9</span>
+                <span className="text-[10px] bg-orange-500 text-white font-black px-1.5 py-0.2 rounded-md uppercase tracking-wider">
+                  Taste
+                </span>
+              </button>
               
               {/* Mode Switcher Button (Popup Trigger) */}
               <button
@@ -155,8 +184,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={onToggleVegOnly}
                   className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
                     isVegOnly
-                      ? 'bg-emerald-50 text-emerald-700 border-emerald-300 shadow-xs'
-                      : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-300 shadow-xs'
+                      : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-slate-300'
                   }`}
                   title="Toggle 100% Pure Veg Dishes"
                 >
@@ -169,7 +198,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* Live Search Trigger (Navigates to Menu) */}
               {onSearchChange && (
-                <div className="relative hidden md:block w-48 xl:w-60">
+                <div className="relative hidden md:block w-40 xl:w-56">
                   <input
                     type="text"
                     value={searchQuery}
@@ -177,17 +206,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onSearchChange(e.target.value);
                       if (currentPage !== 'menu') onNavigate('menu');
                     }}
-                    placeholder="Search biryani, paneer..."
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-slate-100 border border-slate-200 focus:bg-white focus:border-orange-500 focus:outline-none transition-all placeholder:text-slate-400"
+                    placeholder="Search dishes..."
+                    className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:bg-white focus:border-orange-500 focus:outline-none transition-all placeholder:text-slate-400"
                   />
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
                 </div>
               )}
 
               {/* Cart Drawer Button with Price and Badge */}
               <button
                 onClick={() => setIsCartOpen(true)}
-                className="flex items-center gap-2 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl font-bold shadow-md shadow-orange-600/20 active:scale-95 transition-all text-xs sm:text-sm group"
+                className="flex items-center gap-2 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-bold shadow-md shadow-orange-600/20 active:scale-95 transition-all text-xs sm:text-sm group cursor-pointer"
               >
                 <div className="relative">
                   <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:rotate-12 transition-transform" />
@@ -211,7 +240,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="relative">
                     <button
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                      className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-2 rounded-xl text-slate-700 hover:bg-slate-100 transition-colors border border-slate-200"
+                      className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
                     >
                       <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-orange-100 text-orange-700 font-bold flex items-center justify-center text-xs">
                         {user.name.charAt(0).toUpperCase()}
@@ -222,12 +251,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </button>
 
                     {userDropdownOpen && (
-                      <div className="absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                        <div className="px-4 py-2 border-b border-slate-100">
-                          <p className="text-xs font-bold text-slate-900 truncate">{user.name}</p>
-                          <p className="text-[11px] text-slate-500 truncate">{user.email}</p>
+                      <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                        <div className="px-4 py-2 border-b border-slate-100 dark:border-slate-800">
+                          <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{user.name}</p>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">{user.email}</p>
                           <span className={`inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                            isAdmin ? 'bg-purple-100 text-purple-700' : 'bg-emerald-100 text-emerald-700'
+                            isAdmin ? 'bg-purple-100 text-purple-700 dark:bg-purple-950/80 dark:text-purple-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300'
                           }`}>
                             {isAdmin ? 'Store Administrator' : 'Valued Customer'}
                           </span>
@@ -239,7 +268,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                               onNavigate('admin');
                               setUserDropdownOpen(false);
                             }}
-                            className="w-full text-left px-4 py-2 text-xs text-purple-700 font-bold hover:bg-purple-50 flex items-center gap-2"
+                            className="w-full text-left px-4 py-2 text-xs text-purple-700 dark:text-purple-300 font-bold hover:bg-purple-50 dark:hover:bg-purple-950/50 flex items-center gap-2 cursor-pointer"
                           >
                             <LayoutDashboard className="w-4 h-4 text-purple-600" />
                             Admin Dashboard
@@ -251,7 +280,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                             onNavigate('profile');
                             setUserDropdownOpen(false);
                           }}
-                          className="w-full text-left px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2 font-medium"
+                          className="w-full text-left px-4 py-2 text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 font-medium cursor-pointer"
                         >
                           <UserIcon className="w-4 h-4 text-slate-400" />
                           My Profile & Addresses
@@ -262,19 +291,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                             onNavigate('profile');
                             setUserDropdownOpen(false);
                           }}
-                          className="w-full text-left px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2 font-medium"
+                          className="w-full text-left px-4 py-2 text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 font-medium cursor-pointer"
                         >
                           <Clock className="w-4 h-4 text-slate-400" />
                           Order History
                         </button>
 
-                        <div className="border-t border-slate-100 mt-1 pt-1">
+                        <div className="border-t border-slate-100 dark:border-slate-800 mt-1 pt-1">
                           <button
                             onClick={() => {
                               logout();
                               setUserDropdownOpen(false);
                             }}
-                            className="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 font-semibold"
+                            className="w-full text-left px-4 py-2 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 font-semibold cursor-pointer"
                           >
                             Sign Out
                           </button>
@@ -285,7 +314,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 ) : (
                   <button
                     onClick={() => openAuthModal('login')}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-700 hover:text-orange-600 hover:bg-orange-50/70 border border-slate-200 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-orange-600 hover:bg-orange-50/70 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
                   >
                     <UserIcon className="w-4 h-4 text-orange-600" />
                     <span>Sign In</span>
@@ -296,7 +325,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* Mobile Menu Hamburger */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100"
+                className="lg:hidden p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
               </button>
@@ -306,7 +335,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top-4">
+          <div className="lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top-4">
             {/* Mobile Search */}
             {onSearchChange && (
               <div className="relative mb-3">
@@ -318,11 +347,28 @@ export const Navbar: React.FC<NavbarProps> = ({
                     if (currentPage !== 'menu') onNavigate('menu');
                   }}
                   placeholder="Search dishes..."
-                  className="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-slate-100 border border-slate-200 focus:outline-none focus:bg-white"
+                  className="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:bg-white"
                 />
                 <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
               </div>
             )}
+
+            {/* Mobile Taste Reviews Shortcut with Emoji */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleScrollToTasteReviews();
+              }}
+              className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between text-orange-700 dark:text-orange-300 bg-orange-50/80 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🤤</span>
+                <span>Customer Taste Ratings & Reviews</span>
+              </div>
+              <span className="text-xs font-black bg-orange-500 text-white px-2 py-0.5 rounded-full">
+                ⭐ 4.9
+              </span>
+            </button>
 
             {navLinks.map((link) => (
               <button
@@ -333,8 +379,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
                 className={`w-full text-left px-4 py-3 rounded-xl text-sm font-semibold flex items-center justify-between ${
                   currentPage === link.id
-                    ? 'text-orange-600 bg-orange-50 font-bold'
-                    : 'text-slate-700 hover:bg-slate-50'
+                    ? 'text-orange-600 bg-orange-50 font-bold dark:bg-orange-950/30'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                 }`}
               >
                 <span>{link.label}</span>
@@ -352,7 +398,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onNavigate('admin');
                   setMobileMenuOpen(false);
                 }}
-                className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-purple-700 bg-purple-50 flex items-center gap-2"
+                className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 flex items-center gap-2"
               >
                 <LayoutDashboard className="w-4 h-4 text-purple-600" />
                 Admin Dashboard
@@ -361,8 +407,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Veg toggle mobile */}
             {onToggleVegOnly && (
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between px-2">
-                <span className="text-sm font-medium text-slate-700">Pure Veg Dishes Only</span>
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between px-2">
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Pure Veg Dishes Only</span>
                 <button
                   onClick={onToggleVegOnly}
                   className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors ${
@@ -379,4 +425,3 @@ export const Navbar: React.FC<NavbarProps> = ({
     </>
   );
 };
-
