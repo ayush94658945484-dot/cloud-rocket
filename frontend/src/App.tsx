@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SettingsProvider, useSettings } from './context/SettingsContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { ModeProvider, useMode } from './context/ModeContext';
 import { FoodItem } from './types';
 
 // Components
@@ -10,6 +11,7 @@ import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { AuthModal } from './components/AuthModal';
 import { FoodDetailModal } from './components/FoodDetailModal';
+import { ModeModal } from './components/ModeModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 
 // Customer Pages
@@ -36,6 +38,7 @@ import { AdminSettings } from './pages/admin/AdminSettings';
 const MainApp: React.FC = () => {
   const { user, isAdmin, openAuthModal } = useAuth();
   const { settings } = useSettings();
+  const { dietaryMode, setDietaryMode } = useMode();
 
   // Navigation state
   const [currentPage, setCurrentPage] = useState<string>('home');
@@ -45,6 +48,7 @@ const MainApp: React.FC = () => {
   const [menuInitialCategory, setMenuInitialCategory] = useState<string>('all');
   const [initialOrderNumber, setInitialOrderNumber] = useState<string>('');
   const [isVegOnly, setIsVegOnly] = useState<boolean>(false);
+  const activeVegOnly = isVegOnly || dietaryMode === 'veg';
   
   // Modal states
   const [selectedFoodItem, setSelectedFoodItem] = useState<FoodItem | null>(null);
@@ -118,8 +122,12 @@ const MainApp: React.FC = () => {
       <Navbar
         currentPage={currentPage}
         onNavigate={handleNavigate}
-        isVegOnly={isVegOnly}
-        onToggleVegOnly={() => setIsVegOnly(!isVegOnly)}
+        isVegOnly={activeVegOnly}
+        onToggleVegOnly={() => {
+          const next = !activeVegOnly;
+          setIsVegOnly(next);
+          setDietaryMode(next ? 'veg' : 'all');
+        }}
       />
 
       {/* Main Page Body */}
@@ -135,8 +143,12 @@ const MainApp: React.FC = () => {
           <MenuPage
             initialCategory={menuInitialCategory}
             onQuickView={handleQuickView}
-            isVegOnly={isVegOnly}
-            onToggleVegOnly={() => setIsVegOnly(!isVegOnly)}
+            isVegOnly={activeVegOnly}
+            onToggleVegOnly={() => {
+              const next = !activeVegOnly;
+              setIsVegOnly(next);
+              setDietaryMode(next ? 'veg' : 'all');
+            }}
           />
         )}
 
@@ -202,6 +214,9 @@ const MainApp: React.FC = () => {
       {/* Authentication Modal */}
       <AuthModal />
 
+      {/* Dining & Order Mode Switcher Modal */}
+      <ModeModal />
+
       {/* Persistent Floating WhatsApp Help Button */}
       <FloatingWhatsApp />
     </div>
@@ -213,7 +228,9 @@ export default function App() {
     <SettingsProvider>
       <AuthProvider>
         <CartProvider>
-          <MainApp />
+          <ModeProvider>
+            <MainApp />
+          </ModeProvider>
         </CartProvider>
       </AuthProvider>
     </SettingsProvider>

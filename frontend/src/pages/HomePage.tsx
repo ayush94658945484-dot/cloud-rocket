@@ -12,11 +12,15 @@ import {
   Award,
   Layers,
   ChefHat,
-  Heart
+  Heart,
+  Sliders,
+  Bike,
+  Leaf
 } from 'lucide-react';
 import { FoodItem, Category } from '../types';
 import { api } from '../services/api';
 import { useSettings } from '../context/SettingsContext';
+import { useMode } from '../context/ModeContext';
 import { FoodCard } from '../components/FoodCard';
 import { ReviewSection } from '../components/ReviewSection';
 
@@ -27,6 +31,7 @@ interface HomePageProps {
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) => {
   const { settings } = useSettings();
+  const { orderMode, dietaryMode, themeMode, openModeModal } = useMode();
   const [categories, setCategories] = useState<Category[]>([]);
   const [bestsellers, setBestsellers] = useState<FoodItem[]>([]);
   const [featured, setFeatured] = useState<FoodItem[]>([]);
@@ -111,6 +116,40 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
             >
               <Tag className="w-5 h-5 text-amber-400" />
               <span>Today's Special Offers (50% OFF)</span>
+            </button>
+          </div>
+
+          {/* Home Page Mode Switcher Button (Opens Popup) */}
+          <div className="mt-6 flex justify-center">
+            <button
+              type="button"
+              onClick={openModeModal}
+              className="group inline-flex items-center gap-3 bg-slate-900/90 hover:bg-slate-900 text-white border border-amber-500/50 hover:border-amber-400 backdrop-blur-md px-5 py-3 rounded-2xl shadow-2xl shadow-orange-950/50 transition-all cursor-pointer hover:scale-102"
+              title="Click to change Delivery Mode, Pure Veg, or Theme"
+            >
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-md">
+                <Sliders className="w-4 h-4 group-hover:rotate-45 transition-transform" />
+              </div>
+              <div className="text-left">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-amber-300">
+                    Active Mode:
+                  </span>
+                  <span className="text-xs font-bold text-white bg-white/10 px-2.5 py-0.5 rounded-full border border-white/10">
+                    {orderMode === 'delivery' ? '🛵 Express Delivery' : '🥡 Kitchen Pickup'}
+                  </span>
+                  <span className="text-xs font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded-full">
+                    {dietaryMode === 'veg' ? '🟢 Pure Veg Only' : '🍖 All Delicacies'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-300 mt-0.5">
+                  Click here to switch fulfillment, pure veg, or dark mode
+                </p>
+              </div>
+              <span className="ml-1 text-xs font-black bg-gradient-to-r from-orange-500 to-amber-500 text-white px-3.5 py-1.5 rounded-xl shadow-sm group-hover:from-orange-600 group-hover:to-amber-600 transition-all flex items-center gap-1">
+                <span>Change Mode</span>
+                <span className="text-amber-200">⚡</span>
+              </span>
             </button>
           </div>
 
@@ -397,6 +436,28 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
           </div>
         </div>
       </section>
+
+      {/* Floating Home Mode Switcher Pill */}
+      <div className="fixed bottom-6 left-6 z-40">
+        <button
+          type="button"
+          onClick={openModeModal}
+          className="flex items-center gap-2.5 bg-slate-900/95 dark:bg-slate-800/95 hover:bg-black text-white border border-amber-500/40 backdrop-blur-md py-2.5 px-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer group"
+          title="Change Dining & Order Mode"
+        >
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500"></span>
+          </span>
+          <Sliders className="w-4 h-4 text-amber-400 group-hover:rotate-45 transition-transform" />
+          <span className="text-xs font-bold">
+            {orderMode === 'delivery' ? '🛵 Delivery' : '🥡 Pickup'} • {dietaryMode === 'veg' ? '🟢 Veg' : '🍖 All'}
+          </span>
+          <span className="text-[10px] uppercase font-black bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/30">
+            Mode
+          </span>
+        </button>
+      </div>
     </div>
   );
 };

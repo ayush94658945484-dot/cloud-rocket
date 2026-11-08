@@ -10,11 +10,13 @@ import {
   Clock, 
   Sparkles,
   PhoneCall,
-  LayoutDashboard
+  LayoutDashboard,
+  Sliders
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useSettings } from '../context/SettingsContext';
+import { useMode } from '../context/ModeContext';
 
 interface NavbarProps {
   currentPage: string;
@@ -36,6 +38,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const { user, isAdmin, openAuthModal, logout } = useAuth();
   const { itemCount, subtotal, setIsCartOpen } = useCart();
   const { settings } = useSettings();
+  const { orderMode, dietaryMode, openModeModal } = useMode();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
@@ -127,9 +130,25 @@ export const Navbar: React.FC<NavbarProps> = ({
               ))}
             </nav>
 
-            {/* Right Action Icons: Search, Veg Toggle, Cart, Account */}
+            {/* Right Action Icons: Search, Mode Switcher, Veg Toggle, Cart, Account */}
             <div className="flex items-center gap-2.5 sm:gap-4">
               
+              {/* Mode Switcher Button (Popup Trigger) */}
+              <button
+                type="button"
+                onClick={openModeModal}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border border-amber-400/40 bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-200 hover:border-amber-500 shadow-xs cursor-pointer hover:scale-102"
+                title="Change Delivery / Pickup, Pure Veg, or Dark Mode"
+              >
+                <Sliders className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                <span className="hidden md:inline">
+                  {orderMode === 'delivery' ? '🛵 Delivery' : '🥡 Pickup'}
+                </span>
+                <span className="text-[10px] bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100 font-extrabold px-1.5 py-0.2 rounded-full uppercase">
+                  Mode
+                </span>
+              </button>
+
               {/* Veg Only Toggle Button */}
               {onToggleVegOnly && (
                 <button
