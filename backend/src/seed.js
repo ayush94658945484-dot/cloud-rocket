@@ -21,17 +21,17 @@ async function seedData() {
   await db.run(`
     INSERT INTO users (name, email, password_hash, phone, role) 
     VALUES 
-    ('Cloud Rocket Admin', 'admin@cloudrocket.com', ?, '+919876543210', 'admin'),
+    ('Food Rocket Admin', 'admin@foodrocket.com', ?, '+919876543210', 'admin'),
     ('Aarav Sharma', 'customer@gmail.com', ?, '+919812345678', 'customer')
   `, [adminPass, customerPass]);
 
   // 2. Default Website Settings (100% Configurable from Admin!)
   const defaultSettings = [
-    ['business_name', 'Cloud Rocket', 'Brand identity name'],
+    ['business_name', 'Food Rocket', 'Brand identity name'],
     ['tagline', 'Rocket-Fast Gourmet Flavors Delivered Hot & Fresh in 30 Mins', 'Tagline for hero banner'],
     ['whatsapp_number', '919876543210', 'Official Business WhatsApp number for orders'],
     ['contact_phone', '+91 98765 43210', 'Customer service contact number'],
-    ['contact_email', 'orders@cloudrocket.com', 'Official business support email'],
+    ['contact_email', 'orders@foodrocket.com', 'Official business support email'],
     ['address', 'Cloud Culinary Hub, Kitchen Suite #4, Sector 18, Commercial Zone, Mumbai 400053', 'Physical cloud kitchen location'],
     ['opening_hours', '11:00 AM – 11:30 PM (Mon - Sun)', 'Kitchen operational timing'],
     ['delivery_charge', '40', 'Standard base delivery fee in rupees'],
@@ -493,7 +493,7 @@ async function seedData() {
     },
     {
       code: 'ROCKET20',
-      desc: '20% OFF on all cloud rocket combos & curries',
+      desc: '20% OFF on all food rocket combos & curries',
       type: 'PERCENTAGE',
       val: 20,
       min: 349,

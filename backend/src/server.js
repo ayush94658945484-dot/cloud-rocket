@@ -1,8 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const morgan = require('morgan');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+require('dotenv').config();
 
 const { initDatabase } = require('./config/db');
 const { seedData } = require('./seed');
@@ -19,14 +18,17 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: '*', // Allow frontend dev server and production
-  credentials: true
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan('dev'));
 
-// API Routes
+// Static files for uploads if needed
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/food', foodRoutes);
 app.use('/api/orders', orderRoutes);
@@ -38,7 +40,7 @@ app.use('/api/reviews', reviewRoutes);
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
-    server: 'Cloud Rocket Kitchen API',
+    server: 'Food Rocket Kitchen API',
     timestamp: new Date().toISOString()
   });
 });
@@ -69,9 +71,9 @@ async function startServer() {
 
     app.listen(PORT, () => {
       console.log(`=======================================================`);
-      console.log(`🚀 Cloud Rocket Kitchen Server running on port ${PORT}`);
+      console.log(`🚀 Food Rocket Kitchen Server running on port ${PORT}`);
       console.log(`📡 API Health Check: http://localhost:${PORT}/api/health`);
-      console.log(`👑 Admin Credentials: admin@cloudrocket.com / admin123`);
+      console.log(`👑 Admin Credentials: admin@foodrocket.com / admin123`);
       console.log(`👤 Customer Demo: customer@gmail.com / customer123`);
       console.log(`=======================================================`);
     });

@@ -42,7 +42,7 @@ export const AuthModal: React.FC = () => {
 
   const handleQuickDemo = (demoType: 'admin' | 'customer') => {
     if (demoType === 'admin') {
-      setEmail('admin@cloudrocket.com');
+      setEmail('admin@foodrocket.com');
       setPassword('admin123');
     } else {
       setEmail('customer@gmail.com');
@@ -70,7 +70,7 @@ export const AuthModal: React.FC = () => {
           </div>
 
           <h3 className="text-xl font-black text-white">
-            {mode === 'login' ? 'Welcome Back!' : 'Join Cloud Rocket Club'}
+            {mode === 'login' ? 'Welcome Back!' : 'Join Food Rocket Club'}
           </h3>
           <p className="text-xs text-slate-300 mt-1">
             {mode === 'login' 

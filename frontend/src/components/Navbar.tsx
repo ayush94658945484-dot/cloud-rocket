@@ -112,7 +112,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
               <div>
                 <span className="font-extrabold text-xl sm:text-2xl text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
-                  {settings.business_name || 'Cloud Rocket'}
+                  {settings.business_name || 'Food Rocket'}
                   <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-950/80 text-orange-700 dark:text-orange-300 hidden sm:inline-block">
                     Cloud Kitchen
                   </span>

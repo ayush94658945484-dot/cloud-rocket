@@ -10,11 +10,11 @@ interface SettingsContextType {
 }
 
 const defaultSettings: WebsiteSettings = {
-  business_name: 'Cloud Rocket',
+  business_name: 'Food Rocket',
   tagline: 'Rocket-Fast Gourmet Flavors Delivered Hot & Fresh in 30 Mins',
   whatsapp_number: '919876543210',
   contact_phone: '+91 98765 43210',
-  contact_email: 'orders@cloudrocket.com',
+  contact_email: 'orders@foodrocket.com',
   address: 'Cloud Culinary Hub, Kitchen Suite #4, Sector 18, Commercial Zone, Mumbai 400053',
   opening_hours: '11:00 AM – 11:30 PM (Daily)',
   delivery_charge: '40',

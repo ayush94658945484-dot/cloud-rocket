@@ -80,7 +80,7 @@ export const ContactPage: React.FC = () => {
             <Mail className="w-6 h-6" />
           </div>
           <h3 className="font-bold text-slate-900 text-sm">Email Us</h3>
-          <p className="text-xs text-slate-500">{settings.contact_email || 'orders@cloudrocket.com'}</p>
+          <p className="text-xs text-slate-500">{settings.contact_email || 'orders@foodrocket.com'}</p>
           <span className="text-[11px] text-slate-400 block pt-1">Response within 2 hours</span>
         </div>
 

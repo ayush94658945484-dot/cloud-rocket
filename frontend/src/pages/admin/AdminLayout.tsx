@@ -53,7 +53,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             </div>
             <div>
               <h2 className="font-black text-sm tracking-wide text-white leading-tight">
-                {settings.business_name || 'Cloud Rocket'}
+                {settings.business_name || 'Food Rocket'}
               </h2>
               <span className="text-[10px] uppercase font-bold tracking-widest text-orange-400 block">
                 Kitchen Command Center

@@ -66,7 +66,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <Flame className="w-6 h-6" />
               </div>
               <span className="font-extrabold text-2xl text-white tracking-tight">
-                {settings.business_name || 'Cloud Rocket'}
+                {settings.business_name || 'Food Rocket'}
               </span>
             </div>
             
@@ -187,7 +187,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-orange-400 flex-shrink-0" />
-                <span>{settings.contact_email || 'orders@cloudrocket.com'}</span>
+                <span>{settings.contact_email || 'orders@foodrocket.com'}</span>
               </div>
             </div>
           </div>
@@ -195,7 +195,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
         {/* Bottom Copyright & Disclaimer */}
         <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© {new Date().getFullYear()} {settings.business_name || 'Cloud Rocket'}. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {settings.business_name || 'Food Rocket'}. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span className="text-emerald-400 flex items-center gap-1 font-semibold">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>

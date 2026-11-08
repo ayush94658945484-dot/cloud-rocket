@@ -392,7 +392,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
               The Cloud Culinary Edge
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-3">
-              Why Foodies Prefer Cloud Rocket
+              Why Foodies Prefer Food Rocket
             </h2>
             <p className="text-slate-400 text-sm mt-2">
               Unlike traditional dine-in restaurants, 100% of our focus, equipment, and packaging is engineered solely for peak delivery freshness.
@@ -440,7 +440,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
         <div>
           <span className="text-orange-600 dark:text-orange-400 font-extrabold text-xs uppercase tracking-widest bg-orange-100 dark:bg-orange-950/60 px-3 py-1 rounded-full">
-            @CloudRocketKitchen
+            @FoodRocketKitchen
           </span>
           <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight mt-2">
             Follow Our Culinary Journey on Instagram

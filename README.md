@@ -1,4 +1,4 @@
-# 🚀 Cloud Rocket — Premium Cloud Kitchen & Online Ordering Platform
+# 🚀 Food Rocket — Premium Cloud Kitchen & Online Ordering Platform
 
 A modern, responsive, production-ready full-stack website and ordering system designed for a high-volume **Cloud Kitchen & Food Delivery Brand**. Built with **React 19, TypeScript, Tailwind CSS, Node.js/Express, and SQLite/PostgreSQL-compatible relational architecture**, featuring **real-time WhatsApp Click-to-Chat Bill Automation**, coupon discounts, and an **Admin Kitchen Command Center**.
 
@@ -91,7 +91,7 @@ Both accounts are pre-seeded in the database for instant testing:
 
 | Role | Email | Password | Access / Capabilities |
 | :--- | :--- | :--- | :--- |
-| **Kitchen Admin** | `admin@cloudrocket.com` | `admin123` | Full access to `/admin` dashboard, menu CRUD, order status, coupons, settings |
+| **Kitchen Admin** | `admin@foodrocket.com` | `admin123` | Full access to `/admin` dashboard, menu CRUD, order status, coupons, settings |
 | **Customer** | `customer@gmail.com` | `customer123` | Storefront browsing, saved addresses, order history, profile |
 
 > **Pro-Tip**: The login modal includes convenient **1-Click Demo Buttons** so you can switch between Admin and Customer with zero typing!

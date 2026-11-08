@@ -11,7 +11,7 @@ export const PoliciesPages: React.FC<PolicyProps> = ({ type }) => {
         <h1 className="text-3xl font-black text-slate-900">Privacy Policy</h1>
         <p className="text-xs text-slate-400">Last updated: November 2026</p>
         <div className="space-y-4 text-xs sm:text-sm leading-relaxed text-slate-600">
-          <p>At Cloud Rocket, accessible from our official platform, one of our main priorities is the privacy of our visitors and customers. This Privacy Policy document contains types of information that is collected and recorded by us and how we use it.</p>
+          <p>At Food Rocket, accessible from our official platform, one of our main priorities is the privacy of our visitors and customers. This Privacy Policy document contains types of information that is collected and recorded by us and how we use it.</p>
           <h2 className="text-base font-bold text-slate-900 mt-4">1. Information We Collect</h2>
           <p>When you place an order via our online platform or WhatsApp integration, we collect your name, mobile contact number, delivery address, and food preferences solely for food preparation, dispatch tracking, and billing receipts.</p>
           <h2 className="text-base font-bold text-slate-900 mt-4">2. Payment Security</h2>
@@ -29,7 +29,7 @@ export const PoliciesPages: React.FC<PolicyProps> = ({ type }) => {
         <h1 className="text-3xl font-black text-slate-900">Terms & Conditions</h1>
         <p className="text-xs text-slate-400">Last updated: November 2026</p>
         <div className="space-y-4 text-xs sm:text-sm leading-relaxed text-slate-600">
-          <p>Welcome to Cloud Rocket. By placing an order through our website or connected WhatsApp channel, you agree to be bound by these terms.</p>
+          <p>Welcome to Food Rocket. By placing an order through our website or connected WhatsApp channel, you agree to be bound by these terms.</p>
           <h2 className="text-base font-bold text-slate-900 mt-4">1. Food Orders & Availability</h2>
           <p>All items on our menu are subject to real-time kitchen availability. While we make every attempt to ensure live inventory accuracy, seasonal fresh ingredients may occasionally run out.</p>
           <h2 className="text-base font-bold text-slate-900 mt-4">2. Pricing & Taxes</h2>

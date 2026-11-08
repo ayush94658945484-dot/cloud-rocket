@@ -41,11 +41,11 @@ export const AdminSettings: React.FC = () => {
   useEffect(() => {
     if (settings) {
       setFormData({
-        business_name: settings.business_name || 'Cloud Rocket',
+        business_name: settings.business_name || 'Food Rocket',
         tagline: settings.tagline || 'Rocket-Fast Gourmet Flavors Delivered Hot & Fresh in 30 Mins',
         whatsapp_number: settings.whatsapp_number || '919876543210',
         contact_phone: settings.contact_phone || '+91 98765 43210',
-        contact_email: settings.contact_email || 'orders@cloudrocket.com',
+        contact_email: settings.contact_email || 'orders@foodrocket.com',
         address: settings.address || 'Cloud Culinary Hub, Kitchen Suite #4, Sector 18, Commercial Zone, Mumbai 400053',
         opening_hours: settings.opening_hours || '11:00 AM – 11:30 PM (Daily)',
         delivery_charge: settings.delivery_charge || '40',

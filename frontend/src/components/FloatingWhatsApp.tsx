@@ -10,7 +10,7 @@ export const FloatingWhatsApp: React.FC = () => {
     let cleanPhone = rawPhone.replace(/[^0-9]/g, '');
     if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
 
-    const brandName = settings.business_name || 'Cloud Rocket';
+    const brandName = settings.business_name || 'Food Rocket';
     const message = encodeURIComponent(
       `Hello ${brandName}! 👋\nI am browsing your online menu and would like to ask a question or place an order.`
     );

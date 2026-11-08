@@ -56,7 +56,7 @@ export const OrderSuccessPage: React.FC<OrderSuccessPageProps> = ({ order, whats
           Your Feast is Being Prepared!
         </h1>
         <p className="text-slate-600 text-sm max-w-md mx-auto">
-          Thank you for choosing <strong>{settings.business_name || 'Cloud Rocket'}</strong>. Our master chefs have received your ticket and begun preparations.
+          Thank you for choosing <strong>{settings.business_name || 'Food Rocket'}</strong>. Our master chefs have received your ticket and begun preparations.
         </p>
       </div>
 

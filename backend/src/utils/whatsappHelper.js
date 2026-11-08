@@ -2,7 +2,7 @@
  * Generates an ultra-clean, professionally formatted WhatsApp message and direct click-to-chat URL.
  */
 function generateWhatsAppOrderMessage(orderData, businessSettings = {}) {
-  const brandName = businessSettings.business_name || 'Cloud Rocket';
+  const brandName = businessSettings.business_name || 'Food Rocket';
   const orderNum = orderData.order_number || `#ROCKET-${Date.now().toString().slice(-5)}`;
   
   const customerName = orderData.customer_name || 'Customer';
@@ -28,7 +28,7 @@ function generateWhatsAppOrderMessage(orderData, businessSettings = {}) {
   const coupon = orderData.coupon_code ? ` (${orderData.coupon_code})` : '';
 
   const message = 
-`👑 *NEW CLOUD KITCHEN ORDER*
+`👑 *NEW FOOD KITCHEN ORDER*
 *${brandName}*
 ━━━━━━━━━━━━━━━━━━━━
 *Order ID:* ${orderNum}
@@ -38,41 +38,31 @@ function generateWhatsAppOrderMessage(orderData, businessSettings = {}) {
 • *Name:* ${customerName}
 • *Mobile:* ${customerPhone}
 • *Delivery Address:* ${address}${landmark}
+• *Instructions:* ${instructions}
 
-📦 *ITEMS ORDERED:*
+🍲 *ORDER TICKET:*
 ${itemsText}
 
-💰 *BILLING SUMMARY:*
-• Item Subtotal: ₹${subtotal}
-• Discount${coupon}: -₹${discount}
+💰 *PAYMENT BREAKDOWN:*
+• Items Subtotal: ₹${subtotal}
 • Delivery Fee: ${delivery}
 • Taxes & Packaging: ₹${taxes}
-━━━━━━━━━━━━━━━━━━━━
-👉 *FINAL PAYABLE AMOUNT: ₹${total}*
-━━━━━━━━━━━━━━━━━━━━
-📝 *Cooking / Delivery Instructions:*
-${instructions}
+${Number(discount) > 0 ? `• Coupon Discount${coupon}: -₹${discount}\n` : ''}━━━━━━━━━━━━━━━━━━━━
+*FINAL PAYABLE AMOUNT: ₹${total}*
+• *Mode:* Cash On Delivery (COD) / UPI on Arrival
 
-🙏 *Please confirm my order and share live preparation status!*`;
+🚀 Thank you for choosing *${brandName}*! Cooked fresh, packed tamper-proof, delivered in 30 mins.`;
 
-  // Clean phone number (strip +, spaces, dashes)
-  let rawPhone = businessSettings.whatsapp_number || '919876543210';
-  let cleanPhone = rawPhone.replace(/[^0-9]/g, '');
-  // Default to India (91) if 10-digit number without country code
-  if (cleanPhone.length === 10) {
-    cleanPhone = '91' + cleanPhone;
-  }
-
-  const encodedMessage = encodeURIComponent(message);
-  const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
+  const encodedMsg = encodeURIComponent(message);
+  const rawPhone = (businessSettings.whatsapp_number || '919876543210').replace(/\D/g, '');
+  const cleanPhone = rawPhone.startsWith('91') && rawPhone.length === 12 ? rawPhone : `91${rawPhone.slice(-10)}`;
+  const directLink = `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
 
   return {
     rawMessage: message,
-    encodedMessage,
-    whatsappUrl,
-    targetPhone: cleanPhone
+    directLink,
+    whatsappNumber: cleanPhone
   };
 }
 
 module.exports = { generateWhatsAppOrderMessage };
-

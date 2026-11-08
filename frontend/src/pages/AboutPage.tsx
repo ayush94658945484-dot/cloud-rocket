@@ -17,7 +17,7 @@ export const AboutPage: React.FC = () => {
           Redefining Gourmet Food Delivery
         </h1>
         <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-          {settings.business_name || 'Cloud Rocket'} was founded on a simple philosophy: Deliver fine-dining culinary masterworks straight to your home with the exact warmth, aroma, and presentation of a 5-star restaurant.
+          {settings.business_name || 'Food Rocket'} was founded on a simple philosophy: Deliver fine-dining culinary masterworks straight to your home with the exact warmth, aroma, and presentation of a 5-star restaurant.
         </p>
       </div>
 
