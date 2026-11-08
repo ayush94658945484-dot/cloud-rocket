@@ -15,6 +15,7 @@ import { FoodCard } from '../components/FoodCard';
 interface MenuPageProps {
   initialCategory?: string;
   onQuickView: (item: FoodItem) => void;
+  onCustomize?: (item: FoodItem) => void;
   isVegOnly?: boolean;
   onToggleVegOnly?: () => void;
 }
@@ -22,6 +23,7 @@ interface MenuPageProps {
 export const MenuPage: React.FC<MenuPageProps> = ({
   initialCategory = 'all',
   onQuickView,
+  onCustomize,
   isVegOnly = false,
   onToggleVegOnly,
 }) => {
@@ -252,7 +254,12 @@ export const MenuPage: React.FC<MenuPageProps> = ({
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {items.map((dish) => (
-            <FoodCard key={dish.id} item={dish} onQuickView={onQuickView} />
+            <FoodCard 
+              key={dish.id} 
+              item={dish} 
+              onQuickView={onQuickView} 
+              onCustomize={onCustomize} 
+            />
           ))}
         </div>
       )}

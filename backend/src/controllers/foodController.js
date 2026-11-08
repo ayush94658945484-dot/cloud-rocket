@@ -62,25 +62,121 @@ const getFoodItems = async (req, res) => {
         query += ' ORDER BY f.price DESC';
         break;
       case 'rating':
-        query += ' ORDER BY f.rating DESC';
-        break;
-      case 'popular':
-        query += ' ORDER BY f.is_bestseller DESC, f.rating DESC';
+        query += ' ORDER BY f.rating DESC, f.reviews_count DESC';
         break;
       default:
         query += ' ORDER BY f.is_featured DESC, f.is_bestseller DESC, f.id ASC';
-        break;
     }
 
     const items = await db.all(query, params);
-    res.json({ success: true, count: items.length, items });
+
+    res.json({
+      success: true,
+      count: items.length,
+      items
+    });
   } catch (error) {
-    console.error('getFoodItems error:', error);
-    res.status(500).json({ success: false, message: 'Failed to retrieve food items', error: error.message });
+    console.error('getFoodItems Error:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch dishes', error: error.message });
   }
 };
 
-// @desc    Get single food item details
+// @desc    AI Craving Scanner: Recommend real in-stock dishes based on craving & budget
+// @route   GET /api/food/cravings
+const getAICravingRecommendations = async (req, res) => {
+  try {
+    const { craving = 'surprise', budget, is_veg } = req.query;
+
+    let query = `
+      SELECT f.*, c.name as category_name, c.slug as category_slug
+      FROM food_items f
+      LEFT JOIN categories c ON f.category_id = c.id
+      WHERE f.is_available = 1
+    `;
+    const params = [];
+
+    if (is_veg !== undefined && is_veg !== '') {
+      query += ' AND f.is_veg = ?';
+      params.push(is_veg === 'true' || is_veg === '1' ? 1 : 0);
+    }
+
+    if (budget && Number(budget) > 0) {
+      query += ' AND f.price <= ?';
+      params.push(Number(budget));
+    }
+
+    const items = await db.all(query, params);
+
+    // AI Craving Scoring & Match explanation
+    const scoredItems = items.map((item) => {
+      let score = 50;
+      let reason = 'Handpicked chef specialty matching your taste.';
+      const desc = (item.name + ' ' + (item.description || '')).toLowerCase();
+
+      switch (craving.toLowerCase()) {
+        case 'spicy':
+          if (desc.includes('spicy') || desc.includes('pepper') || desc.includes('tandoori') || desc.includes('tikka') || desc.includes('biryani')) {
+            score += 45;
+            reason = 'High spice index with authentic slow-roasted chilies and tandoori heat.';
+          }
+          break;
+        case 'crispy':
+          if (desc.includes('crispy') || desc.includes('crunch') || desc.includes('wings') || desc.includes('roll') || desc.includes('burger')) {
+            score += 45;
+            reason = 'Clay tandoor blistered crunch with golden glazed crust.';
+          }
+          break;
+        case 'cheesy':
+          if (desc.includes('cheese') || desc.includes('paneer') || desc.includes('malai') || desc.includes('cream') || desc.includes('butter')) {
+            score += 45;
+            reason = 'Velvety clotted cream, molten artisanal cheese, and rich butter gravies.';
+          }
+          break;
+        case 'affordable':
+          if (item.price < 250) {
+            score += 40;
+            reason = 'Best value pocket-friendly gourmet delicacy under ₹250.';
+          }
+          break;
+        case 'filling':
+          if (item.calories > 550 || desc.includes('biryani') || desc.includes('combo') || desc.includes('feast')) {
+            score += 45;
+            reason = 'Hefty, deeply satisfying royal portion packed with high satiety.';
+          }
+          break;
+        case 'surprise':
+        default:
+          score += Math.floor(Math.random() * 30);
+          reason = 'Cosmic mystery drop selected by the Food Rocket Head Chef!';
+          break;
+      }
+
+      if (item.is_bestseller) score += 10;
+      if (item.rating >= 4.9) score += 10;
+
+      return {
+        ...item,
+        ai_score: score,
+        ai_match_reason: reason,
+        spice_level: desc.includes('spicy') || desc.includes('pepper') ? '🔥 Hot' : desc.includes('mild') || desc.includes('malai') ? '🌱 Mild' : '⚡ Medium'
+      };
+    });
+
+    scoredItems.sort((a, b) => b.ai_score - a.ai_score);
+    const topMatches = scoredItems.slice(0, 6);
+
+    res.json({
+      success: true,
+      craving,
+      count: topMatches.length,
+      recommendations: topMatches
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Craving scanner failed', error: error.message });
+  }
+};
+
+// @desc    Get single food item by ID
 // @route   GET /api/food/:id
 const getFoodById = async (req, res) => {
   try {
@@ -95,27 +191,26 @@ const getFoodById = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Dish not found' });
     }
 
-    const reviews = await db.all('SELECT * FROM reviews WHERE food_item_id = ? ORDER BY id DESC', [req.params.id]);
-
-    res.json({ success: true, item, reviews });
+    res.json({ success: true, item });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error retrieving food item', error: error.message });
+    res.status(500).json({ success: false, message: 'Failed to retrieve dish', error: error.message });
   }
 };
 
-// @desc    Get all categories
+// @desc    Get all active categories
 // @route   GET /api/food/categories
 const getCategories = async (req, res) => {
   try {
     const categories = await db.all(`
-      SELECT c.*, COUNT(f.id) as item_count 
+      SELECT c.*, COUNT(f.id) as item_count
       FROM categories c
       LEFT JOIN food_items f ON c.id = f.category_id AND f.is_available = 1
       WHERE c.is_active = 1
       GROUP BY c.id
-      ORDER BY c.display_order ASC, c.id ASC
+      ORDER BY c.display_order ASC
     `);
-    res.json({ success: true, categories });
+
+    res.json({ success: true, count: categories.length, categories });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to fetch categories', error: error.message });
   }
@@ -125,35 +220,49 @@ const getCategories = async (req, res) => {
 // @route   POST /api/food
 const createFoodItem = async (req, res) => {
   try {
-    const { category_id, name, description, price, discount_price, is_veg, is_available, is_bestseller, is_featured, image_url, preparation_time, calories } = req.body;
+    const {
+      category_id,
+      name,
+      description,
+      price,
+      discount_price,
+      is_veg,
+      is_available,
+      is_bestseller,
+      is_featured,
+      image_url,
+      preparation_time,
+      calories
+    } = req.body;
 
-    if (!name || price === undefined || !category_id) {
-      return res.status(400).json({ success: false, message: 'Name, price, and category are required' });
+    if (!name || price === undefined) {
+      return res.status(400).json({ success: false, message: 'Dish name and price are mandatory' });
     }
 
     const result = await db.run(`
-      INSERT INTO food_items 
-      (category_id, name, description, price, discount_price, is_veg, is_available, is_bestseller, is_featured, image_url, preparation_time, calories)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO food_items (
+        category_id, name, description, price, discount_price, is_veg,
+        is_available, is_bestseller, is_featured, image_url, preparation_time, calories
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
-      category_id,
+      category_id || null,
       name.trim(),
-      description || '',
+      description || null,
       Number(price),
       discount_price ? Number(discount_price) : null,
-      is_veg ? 1 : 0,
+      is_veg !== undefined ? (is_veg ? 1 : 0) : 1,
       is_available !== undefined ? (is_available ? 1 : 0) : 1,
       is_bestseller ? 1 : 0,
       is_featured ? 1 : 0,
-      image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+      image_url || null,
       preparation_time || '20-25 mins',
       calories ? Number(calories) : null
     ]);
 
-    const newItem = await db.get('SELECT * FROM food_items WHERE id = ?', [result.lastID]);
-    res.status(201).json({ success: true, message: 'Dish added to menu', item: newItem });
+    const created = await db.get('SELECT * FROM food_items WHERE id = ?', [result.lastID]);
+    res.status(201).json({ success: true, message: 'Dish created successfully', item: created });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to add dish', error: error.message });
+    res.status(500).json({ success: false, message: 'Failed to create dish', error: error.message });
   }
 };
 
@@ -161,32 +270,35 @@ const createFoodItem = async (req, res) => {
 // @route   PUT /api/food/:id
 const updateFoodItem = async (req, res) => {
   try {
-    const { category_id, name, description, price, discount_price, is_veg, is_available, is_bestseller, is_featured, image_url, preparation_time, calories } = req.body;
-
     const existing = await db.get('SELECT * FROM food_items WHERE id = ?', [req.params.id]);
     if (!existing) {
       return res.status(404).json({ success: false, message: 'Dish not found' });
     }
 
+    const {
+      category_id,
+      name,
+      description,
+      price,
+      discount_price,
+      is_veg,
+      is_available,
+      is_bestseller,
+      is_featured,
+      image_url,
+      preparation_time,
+      calories
+    } = req.body;
+
     await db.run(`
       UPDATE food_items SET
-        category_id = ?,
-        name = ?,
-        description = ?,
-        price = ?,
-        discount_price = ?,
-        is_veg = ?,
-        is_available = ?,
-        is_bestseller = ?,
-        is_featured = ?,
-        image_url = ?,
-        preparation_time = ?,
-        calories = ?,
-        updated_at = CURRENT_TIMESTAMP
+        category_id = ?, name = ?, description = ?, price = ?, discount_price = ?,
+        is_veg = ?, is_available = ?, is_bestseller = ?, is_featured = ?,
+        image_url = ?, preparation_time = ?, calories = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `, [
       category_id !== undefined ? category_id : existing.category_id,
-      name !== undefined ? name.trim() : existing.name,
+      name ? name.trim() : existing.name,
       description !== undefined ? description : existing.description,
       price !== undefined ? Number(price) : existing.price,
       discount_price !== undefined ? (discount_price ? Number(discount_price) : null) : existing.discount_price,
@@ -235,6 +347,7 @@ const toggleAvailability = async (req, res) => {
 
 module.exports = {
   getFoodItems,
+  getAICravingRecommendations,
   getFoodById,
   getCategories,
   createFoodItem,
@@ -242,4 +355,3 @@ module.exports = {
   deleteFoodItem,
   toggleAvailability
 };
-

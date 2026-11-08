@@ -16,7 +16,11 @@ import {
   Sliders,
   Bike,
   Leaf,
-  Star
+  Star,
+  Users,
+  Gift,
+  Orbit,
+  HelpCircle
 } from 'lucide-react';
 import { FoodItem, Category } from '../types';
 import { api } from '../services/api';
@@ -25,13 +29,26 @@ import { useMode } from '../context/ModeContext';
 import { FoodCard } from '../components/FoodCard';
 import { ReviewSection } from '../components/ReviewSection';
 import { RocketToPlateShowcase } from '../components/RocketToPlateShowcase';
+import { AICravingScanner } from '../components/AICravingScanner';
+import { FoodGalaxy } from '../components/FoodGalaxy';
+import { MysteryMealDrop } from '../components/MysteryMealDrop';
+import { BehindTheKitchen } from '../components/BehindTheKitchen';
 
 interface HomePageProps {
   onNavigate: (page: string, params?: any) => void;
   onQuickView: (item: FoodItem) => void;
+  onCustomize?: (item: FoodItem) => void;
+  onOpenParty?: () => void;
+  onOpenPassport?: () => void;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) => {
+export const HomePage: React.FC<HomePageProps> = ({ 
+  onNavigate, 
+  onQuickView,
+  onCustomize,
+  onOpenParty,
+  onOpenPassport
+}) => {
   const { settings } = useSettings();
   const { orderMode, dietaryMode, themeMode, openModeModal } = useMode();
   const [categories, setCategories] = useState<Category[]>([]);
@@ -70,8 +87,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
     setTimeout(() => setCopiedCoupon(null), 2500);
   };
 
-  const handleScrollToTasteReviews = () => {
-    const el = document.getElementById('taste-reviews');
+  const handleScrollToSection = (id: string) => {
+    const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
@@ -80,25 +97,29 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
   return (
     <div className="space-y-16 sm:space-y-24 pb-20">
       
-      {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden bg-slate-950 min-h-[600px] sm:min-h-[660px] flex items-center justify-center">
-        {/* Background Image with High Quality Dark Gradient Overlay */}
+      {/* 1. HERO SECTION - CRAVINGS DELIVERED FROM ANOTHER PLANET */}
+      <section className="relative overflow-hidden bg-slate-950 min-h-[640px] sm:min-h-[700px] flex items-center justify-center border-b border-amber-500/20">
+        {/* Background Image with Deep Obsidian Overlay */}
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=2000&q=85"
-            alt="Royal Biryani & Gourmet Feasts"
-            className="w-full h-full object-cover object-center opacity-30 mix-blend-luminosity scale-105 animate-pulse duration-[10000ms]"
+            alt="Food Rocket Futuristic Cloud Kitchen"
+            className="w-full h-full object-cover object-center opacity-25 mix-blend-luminosity scale-105 animate-pulse duration-[12000ms]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent"></div>
-          <div className="absolute inset-0 bg-radial from-orange-950/20 via-transparent to-black/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/85 to-slate-950/70"></div>
+          <div className="absolute inset-0 bg-radial from-orange-950/30 via-transparent to-black/80"></div>
         </div>
+
+        {/* Ambient Cosmic Lights */}
+        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-orange-600/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* Hero Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           
-          {/* Official Food Rocket Brand Emblem */}
-          <div className="flex justify-center mb-4">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden bg-white p-1 shadow-2xl shadow-orange-600/40 ring-4 ring-emerald-500/60 hover:scale-108 transition-transform animate-in zoom-in-90 duration-300">
+          {/* Food Rocket Brand Emblem */}
+          <div className="flex justify-center mb-5">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-slate-900 p-1.5 shadow-2xl shadow-orange-600/40 ring-4 ring-amber-500/60 hover:scale-105 transition-transform duration-300">
               <img 
                 src="/food-rocket-logo.png" 
                 alt="Food Rocket Logo - Fuel Your Hunger, Fast" 
@@ -108,137 +129,150 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
           </div>
 
           {/* Top Brand Pill */}
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/25 to-emerald-500/25 border border-orange-500/40 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest text-amber-300 mb-6 shadow-lg shadow-orange-900/20">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/20 via-amber-500/20 to-red-500/20 border border-orange-500/40 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest text-amber-300 mb-6 shadow-lg shadow-orange-950/50">
             <span className="text-sm">🚀</span>
-            <span>Food Rocket Express • Fuel Your Hunger, Fast</span>
+            <span>NEXT-GEN CLOUD KITCHEN • FOOD ROCKET EXPRESS</span>
           </div>
 
-          {/* Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight max-w-4xl mx-auto leading-[1.1]">
-            Artisanal Flavors,{' '}
-            <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 bg-clip-text text-transparent">
-              Delivered Hot & Fresh
-            </span>{' '}
-            in 30 Mins.
+          {/* Core User Requirement Headline */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight max-w-5xl mx-auto leading-[1.08] uppercase">
+            <span className="bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
+              Cravings Delivered From{' '}
+            </span>
+            <span className="bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 bg-clip-text text-transparent underline decoration-orange-500/40 decoration-wavy">
+              Another Planet.
+            </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="mt-6 text-base sm:text-xl text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
-            Authentic slow-dum biryanis, clay-tandoor smoked tikkas, and rich heritage gravies crafted by master chefs exclusively for doorstep delivery.
+          <p className="mt-6 text-base sm:text-xl text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
+            Authentic slow-dum biryanis, 1,000°F clay-tandoor smoked tikkas, and supersonic feast drops crafted by master chefs exclusively for doorstep delivery in 30 minutes.
           </p>
 
-          {/* CTAs */}
+          {/* CTAs: EXPLORE MENU & ORDER NOW */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => onNavigate('menu')}
-              className="w-full sm:w-auto bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-extrabold text-sm sm:text-base px-8 py-4 rounded-2xl shadow-xl shadow-orange-600/30 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-black text-sm sm:text-base px-8 py-4 rounded-2xl shadow-xl shadow-orange-600/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer border border-orange-400/40 group"
             >
-              <ShoppingBag className="w-5 h-5" />
-              <span>Explore Menu & Order</span>
+              <ShoppingBag className="w-5 h-5 text-amber-200 group-hover:rotate-12 transition-transform" />
+              <span>EXPLORE MENU</span>
+              <ChevronRight className="w-4 h-4 text-amber-200" />
             </button>
 
             <button
-              onClick={() => onNavigate('offers')}
-              className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md font-bold text-sm sm:text-base px-8 py-4 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+              onClick={() => onNavigate('menu')}
+              className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-black text-sm sm:text-base px-8 py-4 rounded-2xl shadow-xl shadow-red-600/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer border border-red-400/40"
             >
-              <Tag className="w-5 h-5 text-amber-400" />
-              <span>Today's Special Offers (50% OFF)</span>
+              <Flame className="w-5 h-5 text-amber-300 animate-pulse" />
+              <span>ORDER NOW</span>
             </button>
           </div>
 
-          {/* Action Pills: Mode Switcher & Specific Taste Rating Badge */}
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            {/* Home Page Mode Switcher Button (Opens Popup) */}
+          {/* Quick Jump & Futuristic Feature Pills */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            
+            {/* Mode Switcher */}
             <button
               type="button"
               onClick={openModeModal}
-              className="group inline-flex items-center gap-3 bg-slate-900/90 hover:bg-slate-900 text-white border border-amber-500/50 hover:border-amber-400 backdrop-blur-md px-5 py-3 rounded-2xl shadow-2xl shadow-orange-950/50 transition-all cursor-pointer hover:scale-102"
-              title="Click to change Delivery Mode, Pure Veg, or Theme"
+              className="group inline-flex items-center gap-2.5 bg-slate-900/90 hover:bg-slate-900 text-white border border-amber-500/40 hover:border-amber-400 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl transition-all cursor-pointer hover:scale-102"
+              title="Change Delivery Mode, Pure Veg, or Theme"
             >
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-md">
-                <Sliders className="w-4 h-4 group-hover:rotate-45 transition-transform" />
-              </div>
-              <div className="text-left">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-amber-300">
-                    Active Mode:
-                  </span>
-                  <span className="text-xs font-bold text-white bg-white/10 px-2.5 py-0.5 rounded-full border border-white/10">
-                    {orderMode === 'delivery' ? '🛵 Express Delivery' : '🥡 Kitchen Pickup'}
-                  </span>
-                  <span className="text-xs font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded-full">
-                    {dietaryMode === 'veg' ? '🟢 Pure Veg Only' : '🍖 All Delicacies'}
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-300 mt-0.5">
-                  Fulfillment • pure veg • dark theme
-                </p>
-              </div>
-              <span className="ml-1 text-xs font-black bg-gradient-to-r from-orange-500 to-amber-500 text-white px-3.5 py-1.5 rounded-xl shadow-sm group-hover:from-orange-600 group-hover:to-amber-600 transition-all flex items-center gap-1">
-                <span>Change Mode</span>
-                <span className="text-amber-200">⚡</span>
+              <Sliders className="w-4 h-4 text-amber-400 group-hover:rotate-45 transition-transform" />
+              <span className="text-xs font-bold">
+                {orderMode === 'delivery' ? '🛵 Delivery' : '🥡 Pickup'} • {dietaryMode === 'veg' ? '🟢 Veg Only' : '🍖 All Food'}
+              </span>
+              <span className="text-[10px] font-black uppercase bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/30">
+                Mode
               </span>
             </button>
 
-            {/* Specific Taste Rating Icon & Button with Emojis */}
+            {/* Jump to 3D Rocket Blast Chicken Theater */}
             <button
               type="button"
-              onClick={handleScrollToTasteReviews}
-              className="group inline-flex items-center gap-3 bg-slate-900/90 hover:bg-slate-900 text-white border border-orange-500/50 hover:border-orange-400 backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl transition-all cursor-pointer hover:scale-102"
-              title="Click to check taste reviews with foodie emojis"
+              onClick={() => handleScrollToSection('rocket-blast-theater')}
+              className="group inline-flex items-center gap-2 bg-gradient-to-r from-red-950/80 to-slate-900 hover:bg-slate-900 text-white border border-red-500/50 hover:border-red-400 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl transition-all cursor-pointer hover:scale-102"
+              title="Experience 3D Rocket-to-Plate Blast"
             >
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-400 to-orange-500 flex items-center justify-center text-lg shadow-md group-hover:scale-110 transition-transform">
-                🤤
-              </div>
-              <div className="text-left">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-black text-amber-300">4.9 / 5.0</span>
-                  <span className="text-[10px] text-amber-400 flex items-center gap-0.5">
-                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-300 mt-0.5 flex items-center gap-1">
-                  <span>Taste Score:</span>
-                  <span className="text-amber-300 font-extrabold">Mind-Blowing</span>
-                  <span className="text-xs">😋</span>
-                </p>
-              </div>
-              <span className="ml-1 text-xs font-bold bg-white/10 hover:bg-white/20 text-orange-200 px-3 py-1.5 rounded-xl border border-white/10 flex items-center gap-1">
-                <span>Reviews</span>
-                <span className="text-[10px]">↓</span>
+              <span className="text-sm">🚀</span>
+              <span className="text-xs font-bold text-red-200">3D Rocket Blast</span>
+              <span className="text-[10px] font-black uppercase bg-red-600 text-white px-2 py-0.5 rounded-full">
+                Watch 3D
               </span>
             </button>
 
-            {/* 3D Rocket Blast Chicken Theater Jump Button */}
+            {/* Jump to AI Craving Scanner */}
             <button
               type="button"
-              onClick={() => {
-                const el = document.getElementById('rocket-blast-theater');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="group inline-flex items-center gap-3 bg-gradient-to-r from-red-950/80 via-orange-950/80 to-slate-900 text-white border border-red-500/50 hover:border-orange-400 backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl transition-all cursor-pointer hover:scale-102"
-              title="Watch 3D Rocket Blast Chicken Delivery Demo"
+              onClick={() => handleScrollToSection('craving-scanner-section')}
+              className="group inline-flex items-center gap-2 bg-slate-900/90 hover:bg-slate-900 text-white border border-cyan-500/40 hover:border-cyan-400 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl transition-all cursor-pointer hover:scale-102"
+              title="AI Craving Scanner"
             >
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-red-500 to-orange-500 flex items-center justify-center text-lg shadow-md group-hover:scale-110 transition-transform">
-                🚀
-              </div>
-              <div className="text-left">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-black text-amber-300">3D Blast!</span>
-                  <span className="text-[10px] text-red-300 bg-red-900/60 px-1.5 py-0.5 rounded-full font-bold">💥 3D WebGL</span>
-                </div>
-                <p className="text-[11px] text-slate-300 mt-0.5 flex items-center gap-1">
-                  <span>3D Rocket to Plate</span>
-                  <span className="text-xs">🍗</span>
-                </p>
-              </div>
-              <span className="ml-1 text-xs font-black bg-gradient-to-r from-red-600 to-orange-600 text-white px-3 py-1.5 rounded-xl shadow-sm flex items-center gap-1">
-                <span>Watch 3D</span>
-                <span className="text-xs">↓</span>
+              <Sparkles className="w-4 h-4 text-cyan-400 animate-spin" />
+              <span className="text-xs font-bold text-cyan-200">AI Craving Scanner</span>
+              <span className="text-[10px] font-black uppercase bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded-full border border-cyan-500/40">
+                Match
+              </span>
+            </button>
+
+            {/* Jump to Food Galaxy (Planetary Menu) */}
+            <button
+              type="button"
+              onClick={() => handleScrollToSection('food-galaxy-section')}
+              className="group inline-flex items-center gap-2 bg-slate-900/90 hover:bg-slate-900 text-white border border-purple-500/40 hover:border-purple-400 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl transition-all cursor-pointer hover:scale-102"
+              title="Explore 3D Food Galaxy Planets"
+            >
+              <Orbit className="w-4 h-4 text-purple-400" />
+              <span className="text-xs font-bold text-purple-200">Food Galaxy</span>
+              <span className="text-[10px] font-black uppercase bg-purple-950 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/40">
+                Planets
+              </span>
+            </button>
+
+            {/* Food Party (Group Ordering) */}
+            {onOpenParty && (
+              <button
+                type="button"
+                onClick={onOpenParty}
+                className="group inline-flex items-center gap-2 bg-slate-900/90 hover:bg-slate-900 text-white border border-emerald-500/40 hover:border-emerald-400 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl transition-all cursor-pointer hover:scale-102"
+                title="Collaborative Group Ordering"
+              >
+                <Users className="w-4 h-4 text-emerald-400" />
+                <span className="text-xs font-bold text-emerald-200">Food Party</span>
+                <span className="text-[10px] font-black uppercase bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/40">
+                  Group
+                </span>
+              </button>
+            )}
+
+            {/* Food Passport (Rewards & Miles) */}
+            {onOpenPassport && (
+              <button
+                type="button"
+                onClick={onOpenPassport}
+                className="group inline-flex items-center gap-2 bg-slate-900/90 hover:bg-slate-900 text-white border border-amber-500/40 hover:border-amber-400 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl transition-all cursor-pointer hover:scale-102"
+                title="Digital Food Passport & Membership"
+              >
+                <Award className="w-4 h-4 text-amber-400" />
+                <span className="text-xs font-bold text-amber-200">Food Passport</span>
+                <span className="text-[10px] font-black uppercase bg-amber-950 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/40">
+                  Miles
+                </span>
+              </button>
+            )}
+
+            {/* Jump to Taste Reviews */}
+            <button
+              type="button"
+              onClick={() => handleScrollToSection('taste-reviews')}
+              className="group inline-flex items-center gap-2 bg-slate-900/90 hover:bg-slate-900 text-white border border-orange-500/40 hover:border-orange-400 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl transition-all cursor-pointer hover:scale-102"
+              title="Verified Taste Ratings"
+            >
+              <span className="text-sm">🤤</span>
+              <span className="text-xs font-bold text-amber-300">4.9 / 5.0 Taste</span>
+              <span className="text-[10px] font-black uppercase bg-orange-600 text-white px-2 py-0.5 rounded-full">
+                25k+ Reviews
               </span>
             </button>
           </div>
@@ -261,13 +295,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
               </div>
               <div>
                 <p className="text-xs font-bold text-white">100% Tamper Proof</p>
-                <p className="text-[11px] text-slate-400">Sterilized sealing</p>
+                <p className="text-[11px] text-slate-400">Hologram sterilized seal</p>
               </div>
             </div>
 
-            {/* Specific Taste Rating Trust Item with Emoji */}
             <div 
-              onClick={handleScrollToTasteReviews}
+              onClick={() => handleScrollToSection('taste-reviews')}
               className="flex items-center gap-3 cursor-pointer group"
               title="Click to view Customer Taste Reviews"
             >
@@ -289,19 +322,37 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
               </div>
               <div>
                 <p className="text-xs font-bold text-white">WhatsApp Orders</p>
-                <p className="text-[11px] text-slate-400">Direct 1-tap ordering</p>
+                <p className="text-[11px] text-slate-400">Instant 1-tap ordering</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 1.5. INTERACTIVE ROCKET-TO-PLATE CHICKEN BLAST SHOWCASE */}
+      {/* 2. CINEMATIC 3D ROCKET-TO-PLATE CHICKEN BLAST SHOWCASE */}
       <div id="rocket-blast-theater">
         <RocketToPlateShowcase onNavigate={onNavigate} />
       </div>
 
-      {/* 2. POPULAR FOOD CATEGORIES (8 Categories Grid) */}
+      {/* 3. AI CRAVING SCANNER - REAL-TIME FOOD MATCHING */}
+      <div id="craving-scanner-section">
+        <AICravingScanner 
+          onQuickView={onQuickView} 
+          onCustomize={onCustomize} 
+          onNavigate={onNavigate} 
+        />
+      </div>
+
+      {/* 4. FOOD GALAXY - INTERACTIVE 3D PLANETARY MENU */}
+      <div id="food-galaxy-section">
+        <FoodGalaxy 
+          onQuickView={onQuickView} 
+          onCustomize={onCustomize} 
+          onNavigate={onNavigate} 
+        />
+      </div>
+
+      {/* 5. POPULAR FOOD CATEGORIES */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
@@ -353,7 +404,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
         </div>
       </section>
 
-      {/* 3. PROMO OFFER COUPONS BANNER */}
+      {/* 6. PROMO OFFER COUPONS BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
           <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-white/5 transform skew-x-12 hidden lg:block"></div>
@@ -399,7 +450,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
         </div>
       </section>
 
-      {/* 4. CHEF'S BESTSELLING DISHES */}
+      {/* 7. CHEF'S BESTSELLING DISHES */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
@@ -425,64 +476,30 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {bestsellers.map((dish) => (
-            <FoodCard key={dish.id} item={dish} onQuickView={onQuickView} />
+            <FoodCard 
+              key={dish.id} 
+              item={dish} 
+              onQuickView={onQuickView} 
+              onCustomize={onCustomize}
+            />
           ))}
         </div>
       </section>
 
-      {/* 5. WHY CHOOSE OUR CLOUD KITCHEN */}
-      <section className="bg-slate-900 text-white py-16 sm:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-amber-400 font-extrabold text-xs uppercase tracking-widest bg-amber-400/10 border border-amber-400/20 px-3 py-1 rounded-full">
-              The Cloud Culinary Edge
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-3">
-              Why Foodies Prefer Food Rocket
-            </h2>
-            <p className="text-slate-400 text-sm mt-2">
-              Unlike traditional dine-in restaurants, 100% of our focus, equipment, and packaging is engineered solely for peak delivery freshness.
-            </p>
-          </div>
+      {/* 8. MYSTERY MEAL DROP - SURPRISE ME */}
+      <div id="mystery-drop-section">
+        <MysteryMealDrop />
+      </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-slate-800/60 border border-slate-700/60 rounded-3xl p-8 space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center">
-                <ChefHat className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-white">Zero Compromise Ingredients</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                We use organic cold-pressed oils, aged Himalayan basmati, hand-ground Kashmiri chilies, and farm-fresh paneer & poultry sourced daily.
-              </p>
-            </div>
+      {/* 9. BEHIND THE GALACTIC KITCHEN */}
+      <BehindTheKitchen />
 
-            <div className="bg-slate-800/60 border border-slate-700/60 rounded-3xl p-8 space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                <ShieldCheck className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-white">Hospital-Grade Sterilization</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Continuous HEPA air filtration, UV-C packaging sanitization, and staff temperature logs ensure your meals are cooked with pristine safety.
-              </p>
-            </div>
+      {/* 10. VERIFIED REVIEWS & RATINGS WITH EMOJIS */}
+      <div id="taste-reviews">
+        <ReviewSection />
+      </div>
 
-            <div className="bg-slate-800/60 border border-slate-700/60 rounded-3xl p-8 space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
-                <Clock className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-white">Insulated Hot Thermal Box</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Special three-layer corrugated thermal containers lock in piping-hot steam, crispiness, and moisture all the way from our tandoor to your table.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. VERIFIED REVIEWS & RATINGS WITH EMOJIS */}
-      <ReviewSection />
-
-      {/* 7. INSTAGRAM & SOCIAL MEDIA SECTION */}
+      {/* 11. INSTAGRAM & SOCIAL MEDIA SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
         <div>
           <span className="text-orange-600 dark:text-orange-400 font-extrabold text-xs uppercase tracking-widest bg-orange-100 dark:bg-orange-950/60 px-3 py-1 rounded-full">
@@ -540,7 +557,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
         </div>
       </section>
 
-      {/* Floating Home Mode Switcher Pill */}
+      {/* Floating Home Controls: Mode Switcher & Taste Reviews */}
       <div className="fixed bottom-6 left-6 z-40 flex items-center gap-2">
         <button
           type="button"
@@ -564,7 +581,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onQuickView }) =
         {/* Floating Quick Taste Reviews Pill */}
         <button
           type="button"
-          onClick={handleScrollToTasteReviews}
+          onClick={() => handleScrollToSection('taste-reviews')}
           className="hidden sm:flex items-center gap-1.5 bg-slate-900/95 dark:bg-slate-800/95 hover:bg-black text-white border border-orange-500/40 backdrop-blur-md py-2.5 px-3.5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer group"
           title="View Taste Reviews with Emojis"
         >

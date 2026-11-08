@@ -12,7 +12,9 @@ import {
   PhoneCall,
   LayoutDashboard,
   Sliders,
-  Star
+  Star,
+  Users,
+  Award
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
@@ -26,6 +28,8 @@ interface NavbarProps {
   onSearchChange?: (q: string) => void;
   isVegOnly?: boolean;
   onToggleVegOnly?: () => void;
+  onOpenParty?: () => void;
+  onOpenPassport?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -34,7 +38,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   searchQuery = '',
   onSearchChange,
   isVegOnly = false,
-  onToggleVegOnly
+  onToggleVegOnly,
+  onOpenParty,
+  onOpenPassport
 }) => {
   const { user, isAdmin, openAuthModal, logout } = useAuth();
   const { itemCount, subtotal, setIsCartOpen } = useCart();
@@ -134,7 +140,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={link.id}
                   onClick={() => onNavigate(link.id)}
-                  className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all relative flex items-center gap-1.5 ${
+                  className={`px-3 py-2 rounded-xl text-sm font-semibold transition-all relative flex items-center gap-1.5 ${
                     currentPage === link.id
                       ? 'text-orange-600 bg-orange-50/80 dark:bg-orange-950/40 shadow-xs font-bold'
                       : 'text-slate-700 dark:text-slate-200 hover:text-orange-600 hover:bg-slate-50 dark:hover:bg-slate-800'
@@ -148,21 +154,50 @@ export const Navbar: React.FC<NavbarProps> = ({
                   )}
                 </button>
               ))}
+
+              {/* Food Party Group Link */}
+              {onOpenParty && (
+                <button
+                  type="button"
+                  onClick={onOpenParty}
+                  className="px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 border border-emerald-200 dark:border-emerald-800/60 cursor-pointer"
+                  title="Group Ordering with Friends"
+                >
+                  <Users className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Party</span>
+                  <span className="text-[9px] font-black uppercase bg-emerald-600 text-white px-1.5 py-0.2 rounded-md">
+                    Group
+                  </span>
+                </button>
+              )}
+
+              {/* Food Passport Rewards Link */}
+              {onOpenPassport && (
+                <button
+                  type="button"
+                  onClick={onOpenPassport}
+                  className="px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 border border-amber-200 dark:border-amber-800/60 cursor-pointer"
+                  title="Loyalty Rewards & Badges"
+                >
+                  <Award className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Passport</span>
+                </button>
+              )}
             </nav>
 
             {/* Right Action Icons: Taste Rating, Mode Switcher, Veg Toggle, Cart, Account */}
-            <div className="flex items-center gap-2 sm:gap-3.5">
+            <div className="flex items-center gap-2 sm:gap-3">
 
               {/* Specific Taste Rating Icon & Reviews Button */}
               <button
                 type="button"
                 onClick={handleScrollToTasteReviews}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border border-orange-300/60 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/40 dark:to-amber-950/40 text-orange-800 dark:text-orange-200 hover:border-orange-500 shadow-xs cursor-pointer hover:scale-105 active:scale-95 group"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all border border-orange-300/60 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/40 dark:to-amber-950/40 text-orange-800 dark:text-orange-200 hover:border-orange-500 shadow-xs cursor-pointer hover:scale-105 active:scale-95 group"
                 title="View Verified Customer Taste Ratings with Emojis"
               >
                 <span className="text-base group-hover:scale-125 transition-transform">🤤</span>
                 <span className="font-black text-slate-900 dark:text-white">4.9</span>
-                <span className="text-[10px] bg-orange-500 text-white font-black px-1.5 py-0.2 rounded-md uppercase tracking-wider">
+                <span className="text-[10px] bg-orange-500 text-white font-black px-1.5 py-0.2 rounded-md uppercase tracking-wider hidden sm:inline">
                   Taste
                 </span>
               </button>
@@ -171,7 +206,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 type="button"
                 onClick={openModeModal}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border border-amber-400/40 bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-200 hover:border-amber-500 shadow-xs cursor-pointer hover:scale-102"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all border border-amber-400/40 bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-200 hover:border-amber-500 shadow-xs cursor-pointer hover:scale-102"
                 title="Change Delivery / Pickup, Pure Veg, or Dark Mode"
               >
                 <Sliders className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
@@ -203,7 +238,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* Live Search Trigger (Navigates to Menu) */}
               {onSearchChange && (
-                <div className="relative hidden md:block w-40 xl:w-56">
+                <div className="relative hidden md:block w-36 xl:w-48">
                   <input
                     type="text"
                     value={searchQuery}
@@ -302,6 +337,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                           Order History
                         </button>
 
+                        {onOpenPassport && (
+                          <button
+                            onClick={() => {
+                              onOpenPassport();
+                              setUserDropdownOpen(false);
+                            }}
+                            className="w-full text-left px-4 py-2 text-xs text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30 flex items-center gap-2 font-bold cursor-pointer"
+                          >
+                            <Award className="w-4 h-4 text-amber-500" />
+                            Food Passport Miles
+                          </button>
+                        )}
+
                         <div className="border-t border-slate-100 dark:border-slate-800 mt-1 pt-1">
                           <button
                             onClick={() => {
@@ -386,6 +434,44 @@ export const Navbar: React.FC<NavbarProps> = ({
                 ⭐ 4.9
               </span>
             </button>
+
+            {/* Food Party Mobile */}
+            {onOpenParty && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenParty();
+                }}
+                className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between text-emerald-700 dark:text-emerald-300 bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-emerald-600" />
+                  <span>Food Party (Group Ordering)</span>
+                </div>
+                <span className="text-xs font-black bg-emerald-600 text-white px-2 py-0.5 rounded-full">
+                  Share
+                </span>
+              </button>
+            )}
+
+            {/* Food Passport Mobile */}
+            {onOpenPassport && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenPassport();
+                }}
+                className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between text-amber-700 dark:text-amber-300 bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <Award className="w-4 h-4 text-amber-600" />
+                  <span>Food Passport & Loyalty Miles</span>
+                </div>
+                <span className="text-xs font-black bg-amber-500 text-white px-2 py-0.5 rounded-full">
+                  Miles
+                </span>
+              </button>
+            )}
 
             {navLinks.map((link) => (
               <button

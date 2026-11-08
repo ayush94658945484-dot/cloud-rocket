@@ -7,12 +7,13 @@ import { TasteRatingBadge } from './TasteRating';
 interface FoodDetailModalProps {
   item: FoodItem | null;
   onClose: () => void;
+  onCustomize?: (item: FoodItem) => void;
 }
 
-export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({ item, onClose }) => {
+export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({ item, onClose, onCustomize }) => {
   if (!item) return null;
 
-  const { addToCart, getItemQuantity } = useCart();
+  const { addToCart } = useCart();
   const [modalQty, setModalQty] = useState(1);
 
   const price = item.discount_price && item.discount_price > 0 ? item.discount_price : item.price;
@@ -62,59 +63,38 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({ item, onClose 
           </div>
 
           <div className="absolute bottom-4 left-4 right-4 text-white">
-            <span className="text-xs uppercase tracking-wider text-orange-300 font-bold">
-              {item.category_name || 'Chef Specialty'}
-            </span>
-            <h2 className="text-xl sm:text-2xl font-black text-white leading-tight mt-0.5">
-              {item.name}
-            </h2>
+            <h2 className="text-xl sm:text-2xl font-black">{item.name}</h2>
+            <div className="flex items-center gap-4 mt-1 text-xs text-slate-300">
+              {item.preparation_time && (
+                <span className="flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5 text-orange-400" /> Prep: {item.preparation_time}
+                </span>
+              )}
+              {item.calories && (
+                <span className="flex items-center gap-1 text-amber-300">
+                  <Flame className="w-3.5 h-3.5" /> {item.calories} kcal
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-5">
-          {/* Specific Taste Rating and Attributes bar */}
-          <div className="flex flex-wrap items-center gap-3 py-2 border-b border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
-            {/* Specific Emoji Taste Rating Badge */}
-            <TasteRatingBadge rating={item.rating || 4.8} size="md" showLabel={true} />
-
-            {item.preparation_time && (
-              <div className="flex items-center gap-1 text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 rounded-lg font-medium border border-slate-200/60 dark:border-slate-700">
-                <Clock className="w-4 h-4 text-orange-500" />
-                <span>Prep: {item.preparation_time}</span>
-              </div>
-            )}
-            {item.calories && (
-              <div className="text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 rounded-lg font-medium border border-slate-200/60 dark:border-slate-700">
-                🔥 {item.calories} kcal
-              </div>
-            )}
+        <div className="p-6 overflow-y-auto space-y-4">
+          {/* Specific Taste Rating Icon Badge with Emoji */}
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <TasteRatingBadge 
+              rating={item.rating || 4.8} 
+              size="md" 
+              showLabel={true} 
+            />
+            <span className="text-xs text-slate-400">
+              Verified Gourmet Cloud Kitchen Item
+            </span>
           </div>
 
-          {/* Flavor Notes Tagged with Emojis */}
-          <div className="bg-orange-50/60 dark:bg-orange-950/30 p-3.5 rounded-2xl border border-orange-100 dark:border-orange-900/40">
-            <div className="flex items-center gap-1.5 text-xs font-extrabold text-orange-800 dark:text-orange-300 mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-orange-500" />
-              <span>Artisanal Taste Profile</span>
-            </div>
-            <div className="flex flex-wrap gap-2 text-xs">
-              <span className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 font-semibold flex items-center gap-1">
-                🤤 Slow Dum Marinated
-              </span>
-              <span className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 font-semibold flex items-center gap-1">
-                🌶️ Authentic Spiced
-              </span>
-              <span className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 font-semibold flex items-center gap-1">
-                🧈 Pure Desi Ghee
-              </span>
-            </div>
-          </div>
-
-          {/* Description */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
-              About this delicacy
-            </h4>
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-400 mb-1">Description</h4>
             <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
               {item.description}
             </p>
@@ -126,14 +106,14 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({ item, onClose 
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs font-bold text-slate-900 dark:text-white">Fresh & Hygenic Packaging</p>
+              <p className="text-xs font-bold text-slate-900 dark:text-white">Fresh & Hygienic Packaging</p>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">Packed in premium tamper-proof food-grade containers</p>
             </div>
           </div>
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 sm:p-6 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+        <div className="p-4 sm:p-6 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between gap-3">
           <div>
             <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Total Price</span>
             <div className="flex items-baseline gap-2">
@@ -148,8 +128,23 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({ item, onClose 
             </div>
           </div>
 
-          {/* Quantity selector & Add Button */}
-          <div className="flex items-center gap-3">
+          {/* Quantity selector & Actions */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {onCustomize && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onCustomize(item);
+                }}
+                className="flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/40 font-bold text-xs sm:text-sm px-3.5 py-2.5 rounded-xl transition-all cursor-pointer"
+                title="3D Customize Portion, Spices & Add-ons"
+              >
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                <span>Customize</span>
+              </button>
+            )}
+
             <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-1 shadow-2xs">
               <button
                 onClick={() => setModalQty(Math.max(1, modalQty - 1))}

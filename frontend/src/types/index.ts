@@ -4,6 +4,9 @@ export interface User {
   email: string;
   phone?: string;
   role: 'customer' | 'admin';
+  points?: number;
+  passport_tier?: string;
+  badges?: string[];
   created_at?: string;
 }
 
@@ -39,6 +42,7 @@ export interface FoodItem {
 
 export interface CartItem extends FoodItem {
   quantity: number;
+  customizations?: any;
 }
 
 export interface Coupon {
@@ -62,6 +66,7 @@ export interface OrderItem {
   quantity: number;
   total_price: number;
   is_veg: number;
+  customizations?: any;
 }
 
 export interface Order {
@@ -125,4 +130,3 @@ export interface WebsiteSettings {
   facebook_url?: string;
   delivery_time_estimate?: string;
 }
-

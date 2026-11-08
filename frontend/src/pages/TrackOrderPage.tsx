@@ -8,7 +8,11 @@ import {
   ChefHat,
   AlertCircle,
   ShoppingBag,
-  MessageCircle
+  MessageCircle,
+  ShieldCheck,
+  Package,
+  Sparkles,
+  Rocket
 } from 'lucide-react';
 import { api } from '../services/api';
 import { useSettings } from '../context/SettingsContext';
@@ -56,26 +60,34 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({ initialOrderNumb
     }
   }, [initialOrderNumber]);
 
-  // Status mapping
-  const steps = [
-    { key: 'PENDING', label: 'Order Received', desc: 'Ticket sent to kitchen' },
-    { key: 'CONFIRMED', label: 'Confirmed', desc: 'Kitchen acknowledged order' },
-    { key: 'PREPARING', label: 'Cooking in Handi', desc: 'Freshly prepared by chef' },
-    { key: 'OUT_FOR_DELIVERY', label: 'Out for Delivery', desc: 'Insulated hot thermal box on the way' },
-    { key: 'DELIVERED', label: 'Delivered', desc: 'Enjoy your gourmet feast!' }
+  // 7-Stage Rocket Mission Tracking
+  const missionStages = [
+    { key: 'PENDING', label: '1. Order Received', desc: 'Telemetry ticket logged in kitchen' },
+    { key: 'CONFIRMED', label: '2. Kitchen Accepted', desc: 'Master chef acknowledged coordinates' },
+    { key: 'PREPARING', label: '3. Food Preparation', desc: '1,000°F clay tandoor cooking' },
+    { key: 'QUALITY_CHECK', label: '4. Quality Check', desc: 'Chef aroma & temperature inspection' },
+    { key: 'PACKED', label: '5. Packed & Sealed', desc: 'Airtight thermal tamper-proof seal' },
+    { key: 'OUT_FOR_DELIVERY', label: '6. Out for Delivery', desc: 'Supersonic courier airborne' },
+    { key: 'DELIVERED', label: '7. Delivered Hot', desc: 'Landed fresh on your dining plate!' },
   ];
 
   const getStepIndex = (status: string) => {
     const upper = (status || '').toUpperCase();
     if (upper === 'CANCELLED') return -1;
-    const idx = steps.findIndex(s => s.key === upper);
-    return idx >= 0 ? idx : 0;
+    if (upper === 'PENDING' || upper === 'ORDER_RECEIVED') return 0;
+    if (upper === 'CONFIRMED' || upper === 'KITCHEN_ACCEPTED') return 1;
+    if (upper === 'PREPARING') return 2;
+    if (upper === 'QUALITY_CHECK' || upper === 'CHECKED') return 3;
+    if (upper === 'PACKED') return 4;
+    if (upper === 'OUT_FOR_DELIVERY') return 5;
+    if (upper === 'DELIVERED') return 6;
+    return 0;
   };
 
   const currentStep = order ? getStepIndex(order.order_status) : 0;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
 
       {/* Page Header with Official Food Rocket Logo */}
       <div className="text-center max-w-xl mx-auto space-y-3">
@@ -90,18 +102,15 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({ initialOrderNumb
         </div>
         <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-100 to-emerald-100 dark:from-orange-950/60 dark:to-emerald-950/60 px-4 py-1.5 rounded-full border border-orange-200 dark:border-orange-800">
           <span className="text-xs font-black uppercase tracking-wider text-orange-700 dark:text-orange-300">
-            Live Kitchen Tracking
+            7-Stage Rocket Mission Tracking
           </span>
           <span className="text-xs">🚀</span>
-          <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
-            Fuel Your Hunger, Fast
-          </span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-          Track Your Delivery
+          Track Your Delivery Mission
         </h1>
         <p className="text-slate-500 dark:text-slate-400 text-sm">
-          Enter your unique order number to check real-time cooking & dispatch milestones.
+          Real-time telemetry connected to live clay tandoors & supersonic doorstep dispatch.
         </p>
       </div>
 
@@ -140,7 +149,7 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({ initialOrderNumb
           {/* Top Banner */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-100 dark:border-slate-700 gap-4">
             <div>
-              <span className="text-xs text-slate-400 font-semibold block">Active Order</span>
+              <span className="text-xs text-slate-400 font-semibold block">Active Delivery Mission</span>
               <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-wide mt-0.5">
                 {order.order_number}
               </h2>
@@ -164,45 +173,51 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({ initialOrderNumb
             </div>
           </div>
 
-          {/* Stepper Pipeline */}
+          {/* 7-Stage Rocket Stepper Pipeline */}
           {order.order_status === 'CANCELLED' ? (
             <div className="p-6 bg-rose-50 dark:bg-rose-950/60 rounded-2xl border border-rose-200 dark:border-rose-800 text-center space-y-2">
-              <h3 className="text-base font-bold text-rose-800 dark:text-rose-300">This order was cancelled</h3>
+              <h3 className="text-base font-bold text-rose-800 dark:text-rose-300">This mission was cancelled</h3>
               <p className="text-xs text-rose-600 dark:text-rose-400">Please contact customer support on WhatsApp for queries.</p>
             </div>
           ) : (
             <div className="space-y-6">
-              <h3 className="text-sm font-extrabold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
-                Kitchen Progress Milestones
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-extrabold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                  <Rocket className="w-4 h-4 text-orange-500" />
+                  <span>Mission Flight Telemetry (Stage {currentStep + 1} of 7)</span>
+                </h3>
+                <span className="text-xs font-mono text-emerald-500 font-black">
+                  EST: 30-40 MIN ARRIVAL
+                </span>
+              </div>
 
               <div className="relative">
                 {/* Connecting bar */}
-                <div className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-slate-200 dark:bg-slate-700 -translate-y-1/2 z-0">
+                <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-slate-200 dark:bg-slate-700 -translate-y-1/2 z-0">
                   <div
-                    className="h-full bg-gradient-to-r from-orange-500 to-amber-500 transition-all duration-500"
-                    style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
+                    className="h-full bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500 transition-all duration-700"
+                    style={{ width: `${(currentStep / (missionStages.length - 1)) * 100}%` }}
                   ></div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 relative z-10">
-                  {steps.map((step, idx) => {
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3 relative z-10">
+                  {missionStages.map((step, idx) => {
                     const isCompleted = idx <= currentStep;
                     const isCurrent = idx === currentStep;
 
                     return (
-                      <div key={step.key} className="flex md:flex-col items-center md:text-center gap-3">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs transition-all shadow-md ${isCompleted
+                      <div key={step.key} className="flex lg:flex-col items-center lg:text-center gap-2.5 bg-slate-50 dark:bg-slate-900/40 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all shadow-md ${isCompleted
                             ? 'bg-gradient-to-tr from-orange-600 to-amber-500 text-white shadow-orange-500/30'
                             : 'bg-slate-200 dark:bg-slate-700 text-slate-400'
-                          } ${isCurrent ? 'ring-4 ring-orange-200 dark:ring-orange-800 scale-110' : ''}`}>
-                          {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : idx + 1}
+                          } ${isCurrent ? 'ring-4 ring-orange-400 dark:ring-orange-800 scale-110 animate-bounce' : ''}`}>
+                          {isCurrent ? '🚀' : isCompleted ? <CheckCircle2 className="w-4 h-4" /> : idx + 1}
                         </div>
-                        <div className="flex-1 md:flex-initial">
-                          <p className={`text-xs font-bold ${isCompleted ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
+                        <div className="flex-1 lg:flex-initial">
+                          <p className={`text-[11px] font-black leading-tight ${isCompleted ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
                             {step.label}
                           </p>
-                          <p className="text-[10px] text-slate-400 hidden sm:block">
+                          <p className="text-[9px] text-slate-400 hidden xl:block mt-0.5">
                             {step.desc}
                           </p>
                         </div>
@@ -218,44 +233,54 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({ initialOrderNumb
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-slate-100 dark:border-slate-700 text-xs">
             <div className="space-y-2 bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700">
               <h4 className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-[11px]">
-                Delivery Address
+                Drop Coordinates
               </h4>
-              <p className="text-slate-700 dark:text-slate-300 font-semibold">{order.customer_name} ({order.customer_phone})</p>
-              <p className="text-slate-500 dark:text-slate-400">{order.delivery_address}</p>
-              {order.landmark && <p className="text-slate-400">Landmark: {order.landmark}</p>}
+              <p className="text-slate-600 dark:text-slate-300 font-medium">
+                {order.customer_name} ({order.customer_phone})
+              </p>
+              <p className="text-slate-500 dark:text-slate-400 leading-relaxed">
+                {order.delivery_address}
+                {order.landmark ? `, Landmark: ${order.landmark}` : ''}
+              </p>
               {order.special_instructions && (
-                <p className="text-orange-700 dark:text-orange-400 font-medium mt-1">Note: "{order.special_instructions}"</p>
+                <p className="text-[11px] text-orange-600 dark:text-orange-400 italic">
+                  Note: "{order.special_instructions}"
+                </p>
               )}
             </div>
 
             <div className="space-y-2 bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700">
               <h4 className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-[11px]">
-                Dishes in this Order
+                Delicacy Summary ({items.length} items)
               </h4>
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
                 {items.map((it, idx) => (
-                  <div key={idx} className="flex justify-between text-slate-700 dark:text-slate-300 font-medium">
-                    <span>{it.quantity}x {it.food_name}</span>
-                    <span className="font-bold text-slate-900 dark:text-white">₹{it.total_price}</span>
+                  <div key={idx} className="flex justify-between items-center text-slate-600 dark:text-slate-300">
+                    <span className="truncate pr-2">
+                      {it.quantity}x {it.food_name}
+                    </span>
+                    <span className="font-mono font-semibold">
+                      ₹{Number(it.total_price).toFixed(2)}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Support Actions */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100 dark:border-slate-700">
-            <span className="text-xs text-slate-500 dark:text-slate-400">
-              Need assistance with your delivery?
+          {/* WhatsApp Support Callout */}
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 bg-emerald-50 dark:bg-emerald-950/40 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-800/60">
+            <span className="text-xs text-emerald-800 dark:text-emerald-300 font-medium text-center sm:text-left">
+              Questions regarding this delivery mission? Chat with our Kitchen Operations Flight Control.
             </span>
             <a
               href={`https://wa.me/${(settings.whatsapp_number || '919876543210').replace(/[^0-9]/g, '')}?text=Hi,%20I%20have%20a%20question%20regarding%20my%20order%20${order.order_number}`}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all cursor-pointer"
+              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all cursor-pointer flex-shrink-0"
             >
               <MessageCircle className="w-4 h-4 fill-white" />
-              <span>Chat with Kitchen Team on WhatsApp</span>
+              <span>WhatsApp Flight Control</span>
             </a>
           </div>
         </div>

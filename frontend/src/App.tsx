@@ -5,7 +5,7 @@ import { CartProvider } from './context/CartContext';
 import { ModeProvider, useMode } from './context/ModeContext';
 import { FoodItem } from './types';
 
-// Components
+// Core UI Components
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
@@ -13,6 +13,12 @@ import { AuthModal } from './components/AuthModal';
 import { FoodDetailModal } from './components/FoodDetailModal';
 import { ModeModal } from './components/ModeModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+
+// Futuristic 3D & Galactic Modules
+import { ThreeRocketCursor } from './components/ThreeRocketCursor';
+import { FoodCustomizerModal } from './components/FoodCustomizerModal';
+import { FoodPartyModal } from './components/FoodPartyModal';
+import { FoodPassportModal } from './components/FoodPassportModal';
 
 // Customer Pages
 import { HomePage } from './pages/HomePage';
@@ -52,16 +58,33 @@ const MainApp: React.FC = () => {
   
   // Modal states
   const [selectedFoodItem, setSelectedFoodItem] = useState<FoodItem | null>(null);
+  const [customizingItem, setCustomizingItem] = useState<FoodItem | null>(null);
+  const [isPartyOpen, setIsPartyOpen] = useState<boolean>(false);
+  const [isPassportOpen, setIsPassportOpen] = useState<boolean>(false);
+  const [partyRoomId, setPartyRoomId] = useState<string>('');
   const [lastPlacedOrder, setLastPlacedOrder] = useState<any | null>(null);
   const [lastWhatsappUrl, setLastWhatsappUrl] = useState<string | undefined>(undefined);
 
   // Set document title from business name
   useEffect(() => {
     if (settings.business_name) {
-      document.title = `${settings.business_name} - Online Food Delivery`;
+      document.title = `${settings.business_name} - Cravings Delivered From Another Planet`;
     }
-    document.documentElement.classList.remove('has-3d-rocket-cursor');
   }, [settings.business_name]);
+
+  // Check URL parameters for collaborative party room links (?party=ROOM_ID)
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const party = params.get('party');
+      if (party) {
+        setPartyRoomId(party);
+        setIsPartyOpen(true);
+      }
+    } catch (e) {
+      console.warn('Failed reading query parameters:', e);
+    }
+  }, []);
 
   const handleNavigate = (page: string, params?: any) => {
     // If navigating to admin but user is not admin, open auth modal
@@ -91,6 +114,10 @@ const MainApp: React.FC = () => {
     setSelectedFoodItem(item);
   };
 
+  const handleCustomize = (item: FoodItem) => {
+    setCustomizingItem(item);
+  };
+
   const handleOrderSuccess = (orderData: any, whatsappUrl?: string) => {
     setLastPlacedOrder(orderData);
     setLastWhatsappUrl(whatsappUrl);
@@ -118,7 +145,7 @@ const MainApp: React.FC = () => {
 
   // Render Public / Storefront View
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 antialiased selection:bg-orange-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 antialiased selection:bg-orange-500 selection:text-white">
       {/* Top Navbar */}
       <Navbar
         currentPage={currentPage}
@@ -129,6 +156,8 @@ const MainApp: React.FC = () => {
           setIsVegOnly(next);
           setDietaryMode(next ? 'veg' : 'all');
         }}
+        onOpenParty={() => setIsPartyOpen(true)}
+        onOpenPassport={() => setIsPassportOpen(true)}
       />
 
       {/* Main Page Body */}
@@ -137,6 +166,9 @@ const MainApp: React.FC = () => {
           <HomePage
             onNavigate={handleNavigate}
             onQuickView={handleQuickView}
+            onCustomize={handleCustomize}
+            onOpenParty={() => setIsPartyOpen(true)}
+            onOpenPassport={() => setIsPassportOpen(true)}
           />
         )}
 
@@ -144,6 +176,7 @@ const MainApp: React.FC = () => {
           <MenuPage
             initialCategory={menuInitialCategory}
             onQuickView={handleQuickView}
+            onCustomize={handleCustomize}
             isVegOnly={activeVegOnly}
             onToggleVegOnly={() => {
               const next = !activeVegOnly;
@@ -210,6 +243,34 @@ const MainApp: React.FC = () => {
       <FoodDetailModal
         item={selectedFoodItem}
         onClose={() => setSelectedFoodItem(null)}
+        onCustomize={handleCustomize}
+      />
+
+      {/* 3D Food Customizer Modal */}
+      <FoodCustomizerModal
+        item={customizingItem}
+        onClose={() => setCustomizingItem(null)}
+      />
+
+      {/* Collaborative Food Party Modal */}
+      <FoodPartyModal
+        isOpen={isPartyOpen}
+        onClose={() => setIsPartyOpen(false)}
+        initialPartyId={partyRoomId}
+        onExploreMenu={() => {
+          setIsPartyOpen(false);
+          handleNavigate('menu');
+        }}
+      />
+
+      {/* Digital Food Passport Modal */}
+      <FoodPassportModal
+        isOpen={isPassportOpen}
+        onClose={() => setIsPassportOpen(false)}
+        onExploreMenu={() => {
+          setIsPassportOpen(false);
+          handleNavigate('menu');
+        }}
       />
 
       {/* Authentication Modal */}
@@ -220,6 +281,9 @@ const MainApp: React.FC = () => {
 
       {/* Persistent Floating WhatsApp Help Button */}
       <FloatingWhatsApp />
+
+      {/* 3D Metallic Rocket Mouse Cursor (Desktop with Interactive Toggle) */}
+      <ThreeRocketCursor />
     </div>
   );
 };

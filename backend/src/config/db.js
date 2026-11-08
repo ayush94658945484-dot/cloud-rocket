@@ -67,6 +67,9 @@ async function initDatabase() {
       phone TEXT,
       role TEXT DEFAULT 'customer',
       avatar_url TEXT,
+      points INTEGER DEFAULT 150,
+      passport_tier TEXT DEFAULT 'Cadet',
+      badges TEXT DEFAULT '["Cosmic Voyager", "First Blast"]',
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
@@ -147,9 +150,9 @@ async function initDatabase() {
       tax_amount REAL DEFAULT 0,
       total_amount REAL NOT NULL,
       coupon_code TEXT,
-      payment_method TEXT DEFAULT 'WHATSAPP', -- 'WHATSAPP', 'ONLINE', 'COD'
-      payment_status TEXT DEFAULT 'PENDING',  -- 'PENDING', 'COMPLETED', 'FAILED'
-      order_status TEXT DEFAULT 'PENDING',    -- 'PENDING', 'CONFIRMED', 'PREPARING', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED'
+      payment_method TEXT DEFAULT 'WHATSAPP',
+      payment_status TEXT DEFAULT 'PENDING',
+      order_status TEXT DEFAULT 'ORDER_RECEIVED',
       whatsapp_message_text TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -163,7 +166,8 @@ async function initDatabase() {
       price REAL NOT NULL,
       quantity INTEGER NOT NULL,
       total_price REAL NOT NULL,
-      is_veg INTEGER DEFAULT 1
+      is_veg INTEGER DEFAULT 1,
+      customizations TEXT DEFAULT ''
     );
 
     CREATE TABLE IF NOT EXISTS reviews (
@@ -184,15 +188,38 @@ async function initDatabase() {
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
-    -- Useful indexes
+    CREATE TABLE IF NOT EXISTS party_rooms (
+      id TEXT PRIMARY KEY,
+      host_name TEXT NOT NULL,
+      host_phone TEXT,
+      status TEXT DEFAULT 'OPEN',
+      items_json TEXT DEFAULT '[]',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
     CREATE INDEX IF NOT EXISTS idx_food_category ON food_items(category_id);
     CREATE INDEX IF NOT EXISTS idx_orders_user ON orders(user_id);
     CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(order_status);
   `;
 
   await db.exec(schema);
+
+  // Safe migrations for pre-existing tables
+  try {
+    await db.run('ALTER TABLE users ADD COLUMN points INTEGER DEFAULT 150;');
+  } catch (e) {}
+  try {
+    await db.run("ALTER TABLE users ADD COLUMN passport_tier TEXT DEFAULT 'Cadet';");
+  } catch (e) {}
+  try {
+    await db.run("ALTER TABLE users ADD COLUMN badges TEXT DEFAULT '[\"Cosmic Voyager\", \"First Blast\"]';");
+  } catch (e) {}
+  try {
+    await db.run("ALTER TABLE order_items ADD COLUMN customizations TEXT DEFAULT '';");
+  } catch (e) {}
+
   console.log('Database tables verified and initialized.');
 }
 
 module.exports = { db, initDatabase };
-

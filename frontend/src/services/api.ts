@@ -59,7 +59,7 @@ export const api = {
   getAdminCustomers: () =>
     request<{ success: boolean; customers: any[] }>('/auth/admin/customers'),
 
-  // --- Food Items & Categories ---
+  // --- Food Items ---
   getFoodItems: (params: Record<string, any> = {}) => {
     const query = new URLSearchParams();
     Object.entries(params).forEach(([key, val]) => {
@@ -67,12 +67,15 @@ export const api = {
         query.append(key, String(val));
       }
     });
-    return request<{ success: boolean; count: number; items: any[] }>(`/food?${query.toString()}`);
+    const queryString = query.toString() ? `?${query.toString()}` : '';
+    return request<{ success: boolean; count: number; items: any[] }>(`/food${queryString}`);
   },
 
-  getCategories: () => request<{ success: boolean; categories: any[] }>('/food/categories'),
+  getFoodItemById: (id: number | string) =>
+    request<{ success: boolean; item: any }>(`/food/${id}`),
 
-  getFoodById: (id: number) => request<{ success: boolean; item: any; reviews: any[] }>(`/food/${id}`),
+  getCategories: () =>
+    request<{ success: boolean; count: number; categories: any[] }>('/food/categories'),
 
   createFoodItem: (item: any) =>
     request<{ success: boolean; item: any; message: string }>('/food', {
@@ -91,32 +94,38 @@ export const api = {
       method: 'DELETE',
     }),
 
+  toggleFoodAvailability: (id: number) =>
+    request<{ success: boolean; is_available: number }>(`/food/${id}/availability`, {
+      method: 'PATCH',
+    }),
+
   toggleAvailability: (id: number) =>
     request<{ success: boolean; is_available: number }>(`/food/${id}/availability`, {
       method: 'PATCH',
     }),
 
   // --- Orders ---
-  createOrder: (orderData: any) =>
-    request<{
-      success: boolean;
-      order: any;
-      items: any[];
-      whatsapp: { url: string; message: string; targetPhone: string };
-      message: string;
-    }>('/orders', {
+  createOrder: (orderPayload: any) =>
+    request<{ success: boolean; order: any; items: any[]; message: string; whatsapp?: any }>('/orders', {
       method: 'POST',
-      body: JSON.stringify(orderData),
+      body: JSON.stringify(orderPayload),
     }),
 
   trackOrder: (orderNumber: string) =>
-    request<{ success: boolean; order: any; items: any[] }>(`/orders/track/${orderNumber}`),
+    request<{ success: boolean; order: any; items: any[] }>(`/orders/track/${encodeURIComponent(orderNumber)}`),
 
-  getMyOrders: () => request<{ success: boolean; orders: any[] }>('/orders/my-orders'),
+  getUserOrders: () => request<{ success: boolean; count: number; orders: any[] }>('/orders/my-orders'),
+  getMyOrders: () => request<{ success: boolean; count: number; orders: any[] }>('/orders/my-orders'),
 
   getAdminOrders: (params: Record<string, any> = {}) => {
-    const query = new URLSearchParams(params);
-    return request<{ success: boolean; count: number; orders: any[] }>(`/orders/admin/all?${query.toString()}`);
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, val]) => {
+      if (val !== undefined && val !== null && val !== '') {
+        query.append(key, String(val));
+      }
+    });
+    const queryString = query.toString() ? `?${query.toString()}` : '';
+    return request<{ success: boolean; count: number; orders: any[] }>(`/orders/admin/all${queryString}`);
   },
 
   updateOrderStatus: (id: number, payload: { order_status?: string; payment_status?: string }) =>
@@ -129,6 +138,7 @@ export const api = {
 
   // --- Coupons / Offers ---
   getCoupons: () => request<{ success: boolean; coupons: any[] }>('/coupons'),
+  getAdminCoupons: () => request<{ success: boolean; coupons: any[] }>('/coupons'),
 
   validateCoupon: (code: string, subtotal: number) =>
     request<{ success: boolean; coupon: any; message: string }>('/coupons/validate', {
@@ -136,41 +146,81 @@ export const api = {
       body: JSON.stringify({ code, subtotal }),
     }),
 
-  getAdminCoupons: () => request<{ success: boolean; coupons: any[] }>('/coupons/admin/all'),
-
   createCoupon: (coupon: any) =>
-    request<{ success: boolean; coupon: any; message: string }>('/coupons/admin', {
+    request<{ success: boolean; coupon: any; message: string }>('/coupons', {
       method: 'POST',
       body: JSON.stringify(coupon),
     }),
 
   updateCoupon: (id: number, coupon: any) =>
-    request<{ success: boolean; coupon: any; message: string }>(`/coupons/admin/${id}`, {
+    request<{ success: boolean; coupon: any; message: string }>(`/coupons/${id}`, {
       method: 'PUT',
       body: JSON.stringify(coupon),
     }),
 
   deleteCoupon: (id: number) =>
-    request<{ success: boolean; message: string }>(`/coupons/admin/${id}`, {
+    request<{ success: boolean; message: string }>(`/coupons/${id}`, {
       method: 'DELETE',
     }),
 
-  // --- Settings ---
-  getSettings: () => request<{ success: boolean; settings: any }>('/settings'),
+  toggleCouponStatus: (id: number) =>
+    request<{ success: boolean; is_active: number }>(`/coupons/${id}/status`, {
+      method: 'PATCH',
+    }),
 
-  updateSettingsBulk: (settings: Record<string, any>) =>
-    request<{ success: boolean; settings: any; message: string }>('/settings/admin/bulk', {
-      method: 'POST',
-      body: JSON.stringify(settings),
+  // --- Settings ---
+  getSettings: () => request<{ success: boolean; settings: Record<string, string> }>('/settings'),
+
+  updateSettings: (settingsMap: Record<string, string>) =>
+    request<{ success: boolean; settings: Record<string, string>; message: string }>('/settings', {
+      method: 'PUT',
+      body: JSON.stringify(settingsMap),
+    }),
+
+  updateSettingsBulk: (settingsMap: Record<string, string>) =>
+    request<{ success: boolean; settings: Record<string, string>; message: string }>('/settings', {
+      method: 'PUT',
+      body: JSON.stringify(settingsMap),
     }),
 
   // --- Reviews ---
-  getReviews: () => request<{ success: boolean; reviews: any[] }>('/reviews'),
+  getReviews: (foodId?: number) => {
+    const q = foodId ? `?food_item_id=${foodId}` : '';
+    return request<{ success: boolean; count: number; reviews: any[] }>(`/reviews${q}`);
+  },
 
-  addReview: (review: { rating: number; comment: string; user_name?: string; food_item_id?: number }) =>
+  createReview: (review: { food_item_id?: number; user_name: string; rating: number; comment: string }) =>
     request<{ success: boolean; review: any; message: string }>('/reviews', {
       method: 'POST',
       body: JSON.stringify(review),
     }),
-};
 
+  addReview: (review: { food_item_id?: number; user_name: string; rating: number; comment: string }) =>
+    request<{ success: boolean; review: any; message: string }>('/reviews', {
+      method: 'POST',
+      body: JSON.stringify(review),
+    }),
+
+  // --- Futuristic Features: AI Craving Scanner & Party Group Ordering ---
+  getAICravings: (craving = 'surprise', budget?: number, is_veg?: boolean) => {
+    let url = `/food/cravings?craving=${encodeURIComponent(craving)}`;
+    if (budget) url += `&budget=${budget}`;
+    if (is_veg !== undefined) url += `&is_veg=${is_veg ? '1' : '0'}`;
+    return request<{ success: boolean; craving: string; recommendations: any[] }>(url);
+  },
+
+  createPartyRoom: (host_name: string, host_phone?: string) =>
+    request<{ success: boolean; roomId: string; shareUrl: string; message: string }>('/party/create', {
+      method: 'POST',
+      body: JSON.stringify({ host_name, host_phone }),
+    }),
+
+  getPartyRoom: (id: string) =>
+    request<{ success: boolean; room: any }>(`/party/${id}`),
+
+  addPartyItem: (id: string, payload: { userName: string; foodItem: any; quantity: number; customization?: string }) =>
+    request<{ success: boolean; items: any[]; message: string }>(`/party/${id}/add-item`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+};

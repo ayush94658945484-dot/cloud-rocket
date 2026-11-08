@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   getFoodItems,
+  getAICravingRecommendations,
   getFoodById,
   getCategories,
   createFoodItem,
@@ -14,6 +15,7 @@ const { adminOnly } = require('../middleware/adminMiddleware');
 
 // Public
 router.get('/', getFoodItems);
+router.get('/cravings', getAICravingRecommendations);
 router.get('/categories', getCategories);
 router.get('/:id', getFoodById);
 
@@ -24,4 +26,3 @@ router.delete('/:id', protect, adminOnly, deleteFoodItem);
 router.patch('/:id/availability', protect, adminOnly, toggleAvailability);
 
 module.exports = router;
-
